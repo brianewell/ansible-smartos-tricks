@@ -9,6 +9,7 @@
     state: present
     extra_zfs_properties:
       mountpoint: none
+  ignore_errors: true
   notify: remove delegated mountpoint
 - name: update sshd configuration
   template:

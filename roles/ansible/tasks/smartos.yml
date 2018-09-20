@@ -1,0 +1,48 @@
+---
+- name: install prerequisite software through pkgin
+  pkgin:
+    name:
+    - libyaml
+    - py27-bcrypt
+    - py27-cryptography
+    - py27-nacl
+    - py27-pip
+    - redis
+    state: present
+    update_cache: yes
+- name: update pip to the latest version
+  pip:
+    name: pip
+    state: latest
+- name: install the latest version of ansible
+  pip:
+    name:
+    - ansible
+    - redis
+    state: latest
+- name: ensure existance of ansible configuration directory
+  file:
+    path: /etc/ansible
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+- name: configure ansible
+  template:
+    src: ansible.cfg
+    dest: /etc/ansible/ansible.cfg
+    owner: root
+    group: root
+    mode: 0644
+- name: configure redis
+  template:
+    src: redis.conf
+    dest: /opt/local/etc/redis.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart redis
+- name: enable redis
+  service:
+    name: 'svc:/pkgsrc/redis:default'
+    enabled: true

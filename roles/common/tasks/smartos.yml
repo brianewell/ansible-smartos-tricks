@@ -1,9 +1,12 @@
+# Written against SmartOS v18.2.0 at 2018-09-22 
 ---
-- name: disable unnecessary default services
+# Disable inetd and sac, which are normally unnecessary
+- name: ensure that unnecessary default services are disabled
   service:
     name: 'svc:/network/inetd:default svc:/system/sac:default'
     enabled: false
-- name: unmount delegated ZFS dataset
+# Unmount the defaultly mounted delegated ZFS dataset as we will mount sub-datasets where we need them later on
+- name: ensure that delegated ZFS dataset is unmounted
   zfs:
     name: '{{ ansible_mounts.0.device }}/data'
     state: present
@@ -11,7 +14,8 @@
       mountpoint: none
   ignore_errors: true
   notify: remove delegated mountpoint
-- name: update sshd configuration
+# Update the sshd configuration to not use depriciated parameters
+- name: ensure that sshd configuration is current
   template:
     src: sshd_config
     dest: /etc/ssh/sshd_config

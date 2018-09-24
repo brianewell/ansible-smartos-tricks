@@ -24,7 +24,7 @@
     mode: 0644
   notify: restart sshd
 # Update useradd defaults to manage ZFS datasets per user
-- name: ensure that ZFS datasets will be managed by useradd
+- name: ensure that useradd will manage ZFS datasets
   template:
     src: useradd
     dest: /etc/default/useradd

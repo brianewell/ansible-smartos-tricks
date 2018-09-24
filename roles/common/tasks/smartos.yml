@@ -23,3 +23,20 @@
     group: root
     mode: 0644
   notify: restart sshd
+# Update useradd defaults to manage ZFS datasets per user
+- name: ensure that ZFS datasets will be managed by useradd
+  template:
+    src: useradd
+    dest: /etc/default/useradd
+    owner: root
+    group: root
+    mode: 0644
+# Set a global inputrc to ensure proper terminal behavior
+- name: ensure that inputrc is properly configured
+  template:
+    src: inputrc
+    dest: /etc/inputrc
+    owner: root
+    group: root
+    mode: 0644
+# Ensure that elflord is the colorscheme used by vim

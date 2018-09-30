@@ -1,10 +1,11 @@
-# Written against SmartOS v18.2.0 at 2018-09-22 
+# Written for SmartOS v18.2.0 at 2018-09-22 
 ---
 # Disable inetd and sac, which are normally unnecessary
 - name: ensure that unnecessary default services are disabled
   service:
     name: 'svc:/network/inetd:default svc:/system/sac:default'
     enabled: false
+
 # Unmount the defaultly mounted delegated ZFS dataset as we will mount sub-datasets where we need them later on
 - name: ensure that delegated ZFS dataset is unmounted
   zfs:
@@ -14,6 +15,7 @@
       mountpoint: none
   ignore_errors: true
   notify: remove delegated mountpoint
+
 # Update the sshd configuration to not use depriciated parameters
 - name: ensure that sshd configuration is current
   template:
@@ -23,6 +25,7 @@
     group: root
     mode: 0644
   notify: restart sshd
+
 # Update useradd defaults to manage ZFS datasets per user
 - name: ensure that useradd will manage ZFS datasets
   template:
@@ -31,6 +34,7 @@
     owner: root
     group: root
     mode: 0644
+
 # Set a global inputrc to ensure proper terminal behavior
 - name: ensure that inputrc is properly configured
   template:
@@ -39,4 +43,3 @@
     owner: root
     group: root
     mode: 0644
-# Ensure that elflord is the colorscheme used by vim

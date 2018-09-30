@@ -10,8 +10,6 @@
     - py27-nacl
     - py27-pip
     - redis
-    state: present
-    update_cache: yes
 
 # Update pip through pip, as it tends to update there faster than it does through pkgin
 - name: ensure that pip is at the latest version
@@ -25,6 +23,7 @@
     name:
     - ansible
     - redis
+    - pywinrm>=0.3.0
     state: latest
 
 # Configure Ansible to make use of a redis cache

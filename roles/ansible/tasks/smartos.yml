@@ -22,8 +22,9 @@
   pip:
     name:
     - ansible
-    - redis
+    - netaddr
     - pywinrm>=0.3.0
+    - redis
     state: latest
 
 # Configure Ansible to make use of a redis cache

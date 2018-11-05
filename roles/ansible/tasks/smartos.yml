@@ -11,7 +11,7 @@
     - py27-pip
     - redis
 
-# Update pip through pip, as it tends to update there faster than it does through pkgin
+# Update pip through pip, as it tends to be maintained better there than it is through pkgin
 - name: ensure that pip is at the latest version
   pip:
     name: pip

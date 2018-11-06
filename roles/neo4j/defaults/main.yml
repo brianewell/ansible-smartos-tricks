@@ -1,0 +1,5 @@
+---
+  neo4j_path: /opt/local/neo4j
+  neo4j_conf_path: /opt/local/etc/neo4j
+  neo4j_data_path: /var/db/neo4j
+  neo4j_version: '3.4.9'

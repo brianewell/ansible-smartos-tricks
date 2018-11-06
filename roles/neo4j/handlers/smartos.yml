@@ -1,0 +1,5 @@
+---
+- name: restart neo4j
+  service:
+    name: 'svc:/neo4j:default'
+    state: restarted

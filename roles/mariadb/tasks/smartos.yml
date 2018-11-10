@@ -1,0 +1,31 @@
+# Written for MariaDB v10.0.32 at 2018-11-05
+---
+# Ensure that a dataset has been created for MariaDB
+- name: ensure presence of mariadb ZFS dataset
+  zfs:
+    name: '{{ ansible_mounts.0.device }}/data/mariadb'
+    state: present
+    extra_zfs_properties:
+      mountpoint: /var/mysql
+      recordsize: 16k
+  when: delegated_dataset is succeeded
+
+# Ensure that MariaDB server is installed
+- name: ensure presence of mariadb-server
+  pkgin:
+    name: mariadb-server
+
+# Ensure that MariaDB server mountpoint is secure
+- name: ensure secure permissions on mariadb ZFS mountpoint
+  file:
+    path: /var/mysql
+    state: directory
+    owner: mysql
+    group: root
+    mode: 0700
+
+# Ensure that MariaDB server is enabled in SMF
+- name: ensure that mariadb-server is enabled
+  service:
+    name: 'svc:/pkgsrc/mariadb:default'
+    enabled: true

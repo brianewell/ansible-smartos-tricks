@@ -1,0 +1,5 @@
+---
+#- name: set permissions on mariadb ZFS mountpoint
+#  service:
+#    name: 'svc:/pkgsrc/redis:default'
+#    state: restarted

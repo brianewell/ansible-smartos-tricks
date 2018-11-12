@@ -3,7 +3,7 @@
 # Ensure that a dataset has been created for MariaDB
 - name: ensure presence of mariadb ZFS dataset
   zfs:
-    name: '{{ ansible_mounts.0.device }}/data/mariadb'
+    name: '{{ ansible_mounts.0.device }}/data/mysql'
     state: present
     extra_zfs_properties:
       mountpoint: /var/mysql

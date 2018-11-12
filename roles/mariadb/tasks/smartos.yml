@@ -11,9 +11,11 @@
   when: delegated_dataset is succeeded
 
 # Ensure that MariaDB server is installed
-- name: ensure presence of mariadb-server
+- name: ensure presence of mariadb-server and pymysql (for ansible configuration of MariaDB)
   pkgin:
-    name: mariadb-server
+    name:
+    - mariadb-server
+    - py27-pymysql
 
 # Ensure that MariaDB server mountpoint is secure
 - name: ensure secure permissions on mariadb ZFS mountpoint
@@ -29,3 +31,45 @@
   service:
     name: 'svc:/pkgsrc/mariadb:default'
     enabled: true
+
+# Ensure absence of MariaDB test database
+- name: ensure absence of MariaDB test database
+  mysql_db:
+    name: test
+    state: absent
+
+# Ensure absence of anonymous MariaDB users
+- name: ensure absence of anonymous MariaDB users
+  mysql_user:
+    name: ''
+    host_all: true
+    state: absent
+
+# Ensure absence of FQDN referenced root user (this user causes configuration issues later on)
+- name: ensure absence of FQDN host root user
+  mysql_user:
+    name: root
+    host: '{{ ansible_hostname }}'
+    state: absent
+
+# Set a randomized password to be used for the MariaDB root user
+- name: ensure that the MariaDB root user will be using a randomized password
+  set_fact:
+    mariadb_root_password: "{{ lookup( 'password', '/dev/null' ) }}"
+
+# Ensure that MariaDB root password is set to a random value
+- name: ensure that MariaDB root password is set to a random value
+  mysql_user:
+    check_implicit_admin: true
+    name: root
+    host_all: true
+    password: '{{ mariadb_root_password }}'
+
+# Ensure that .my.cnf file exists with root credentials
+- name: ensure that .my.cnf exists with root credentials
+  template:
+    src: my.cnf
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0644

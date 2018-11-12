@@ -1,0 +1,53 @@
+# Written for PostgreSQL 10.5 at 2018-11-11
+---
+# Ensure that a dataset has been created for PostgreSQL
+- name: ensure presence of postgresql ZFS dataset
+  zfs:
+    name: '{{ ansible_mounts.0.device }}/data/pgsql'
+    state: present
+    extra_zfs_properties:
+      mountpoint: /var/pgsql
+      recordsize: 16k
+  when: delegated_dataset is succeeded
+
+# Ensure that PostgreSQL server is installed
+- name: ensure presence of postgresql-server
+  pkgin:
+    name: postgresql10-server
+
+# Ensure that PostgreSQL server mountpoint is secure
+- name: ensure secure permissions on postgresql ZFS mountpoint
+  file:
+    path: /var/pgsql
+    state: directory
+    owner: postgres
+    group: postgres
+    mode: 0700
+
+# Ensure that the PostgreSQL database has been initialized with the C locale (speeds up sorting)
+- name: ensure that the database has been initialized properly
+  command: /opt/local/bin/initdb --pgdata=/var/pgsql/data --encoding=UTF8 --locale=C
+  args:
+    creates: /var/pgsql/data/PG_VERSION
+  become: true
+  become_user: postgres
+
+# Ensure that PostgreSQL server is configured to take advantage of ZFS
+- name: ensure that postgresql-server is properly configured
+  template:
+    src: '{{ item }}'
+    dest: '/var/pgsql/data/{{ item }}'
+    owner: postgres
+    group: postgres
+    mode: 0600
+  notify: restart postgresql-server
+  with_items:
+    - postgresql.conf
+    - pg_hba.conf
+    - pg_ident.conf
+
+# Ensure that PostgreSQL server is enabled in SMF
+- name: ensure that postgresql-server is enabled
+  service:
+    name: 'svc:/pkgsrc/postgresql:default'
+    enabled: true

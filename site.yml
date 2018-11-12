@@ -14,3 +14,7 @@
 - hosts: neo4j
   roles:
   - neo4j
+
+- hosts: postgresql
+  roles:
+  - postgresql

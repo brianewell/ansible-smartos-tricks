@@ -1,0 +1,5 @@
+---
+- name: restart postgresql-server
+  service:
+    name: 'svc:/pkgsrc/postgresql:default'
+    state: restarted

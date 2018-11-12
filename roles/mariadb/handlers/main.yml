@@ -1,3 +1,0 @@
----
-- import_tasks: smartos.yml
-  when: ansible_distribution|lower == 'smartos'

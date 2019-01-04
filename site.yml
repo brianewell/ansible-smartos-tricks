@@ -7,9 +7,9 @@
   roles:
   - ansible
 
-- hosts: mariadb
+- hosts: mysql
   roles:
-  - mariadb
+  - mysql
 
 - hosts: neo4j
   roles:

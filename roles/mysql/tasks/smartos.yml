@@ -1,7 +1,7 @@
 # Written for MariaDB v10.0.32 at 2018-11-05
 ---
 # Ensure that a dataset has been created for MariaDB
-- name: ensure presence of mariadb ZFS dataset
+- name: ensure presence of mysql ZFS dataset
   zfs:
     name: '{{ ansible_mounts.0.device }}/data/mysql'
     state: present
@@ -11,14 +11,14 @@
   when: delegated_dataset is succeeded
 
 # Ensure that MariaDB server is installed
-- name: ensure presence of mariadb-server and pymysql (for ansible configuration of MariaDB)
+- name: ensure presence of {{ mysql_fork }}-server and pymysql (for ansible configuration of {{ mysql_fork }})
   pkgin:
     name:
-    - mariadb-server
+    - '{{ mysql_fork }}-server'
     - py27-pymysql
 
 # Ensure that MariaDB server mountpoint is secure
-- name: ensure secure permissions on mariadb ZFS mountpoint
+- name: ensure secure permissions on mysql ZFS mountpoint
   file:
     path: /var/mysql
     state: directory
@@ -27,19 +27,19 @@
     mode: 0700
 
 # Ensure that MariaDB server is enabled in SMF
-- name: ensure that mariadb-server is enabled
+- name: ensure that {{ mysql_fork }}-server is enabled
   service:
-    name: 'svc:/pkgsrc/mariadb:default'
+    name: 'svc:/pkgsrc/{{ mysql_fork }}:default'
     enabled: true
 
 # Ensure absence of MariaDB test database
-- name: ensure absence of MariaDB test database
+- name: ensure absence of {{ mysql_fork }} test database
   mysql_db:
     name: test
     state: absent
 
 # Ensure absence of anonymous MariaDB users
-- name: ensure absence of anonymous MariaDB users
+- name: ensure absence of anonymous {{ mysql_fork }} users
   mysql_user:
     name: ''
     host_all: true
@@ -53,17 +53,17 @@
     state: absent
 
 # Set a randomized password to be used for the MariaDB root user
-- name: ensure that the MariaDB root user will be using a randomized password
+- name: generate a randomized password for the {{ mysql_fork }} root user
   set_fact:
-    mariadb_root_password: "{{ lookup( 'password', '/dev/null' ) }}"
+    mysql_root_password: "{{ lookup( 'password', '/dev/null' ) }}"
 
 # Ensure that MariaDB root password is set to a random value
-- name: ensure that MariaDB root password is set to a random value
+- name: ensure that {{ mysql_fork }} root password is set to the previously generated password
   mysql_user:
     check_implicit_admin: true
     name: root
     host_all: true
-    password: '{{ mariadb_root_password }}'
+    password: '{{ mysql_root_password }}'
 
 # Ensure that .my.cnf file exists with root credentials
 - name: ensure that .my.cnf exists with root credentials

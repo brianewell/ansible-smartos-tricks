@@ -1,0 +1,6 @@
+---
+  postgresql_server: postgresql10-server
+  postgresql:
+    locale: C
+    max_connections: 100
+    shared_buffers: 128MB

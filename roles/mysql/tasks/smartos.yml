@@ -16,6 +16,7 @@
     name:
     - '{{ mysql_fork }}-server'
     - py27-pymysql
+  notify: restart {{ mysql_fork }}-server
 
 # Ensure that MariaDB server mountpoint is secure
 - name: ensure secure permissions on mysql ZFS mountpoint

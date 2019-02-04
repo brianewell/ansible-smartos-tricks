@@ -2,13 +2,13 @@
 ---
 # Ensure that a dataset has been created for MariaDB
 - name: ensure presence of mysql ZFS dataset
+  when: delegated_dataset is succeeded
   zfs:
     name: '{{ ansible_mounts.0.device }}/data/mysql'
     state: present
     extra_zfs_properties:
       mountpoint: /var/mysql
       recordsize: 16k
-  when: delegated_dataset is succeeded
 
 # Ensure that MariaDB server is installed
 - name: ensure presence of {{ mysql_fork }}-server and pymysql (for ansible configuration of {{ mysql_fork }})

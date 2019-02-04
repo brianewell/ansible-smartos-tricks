@@ -27,13 +27,13 @@
 
 # Ensure that a dataset has been created for neo4j
 - name: 'ensure that neo4j ZFS dataset exists at {{ neo4j_data_path }}'
+  when: delegated_dataset is succeeded
   zfs:
     name: '{{ ansible_mounts.0.device }}/data/neo4j'
     state: present
     extra_zfs_properties:
       mountpoint: '{{ neo4j_data_path }}'
       recordsize: 16k
-  when: delegated_dataset is succeeded
 
 # Ensure that all root owned directories exist and have the proper permissions
 - name: 'ensure that root owned Neo4j directories exist and have the proper permissions'

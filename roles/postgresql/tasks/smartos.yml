@@ -9,7 +9,6 @@
     extra_zfs_properties:
       mountpoint: /var/pgsql
       recordsize: 16k
-  notify: restart postgresql-server
 
 # Ensure that PostgreSQL server mountpoint is secure
 - name: ensure secure permissions on postgresql ZFS mountpoint

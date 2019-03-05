@@ -17,7 +17,7 @@
   register: delegated_dataset
   notify: remove delegated mountpoint
 
-# Update the sshd configuration to not use depriciated parameters
+# Update the sshd configuration to not use depreciated parameters
 - name: ensure that sshd configuration is current
   template:
     src: sshd_config

@@ -1,4 +1,4 @@
-# Written for Neo4j v3.4.9 at 2018-11-05
+# Written for Neo4j v3.5.3 at 2019-03-06
 ---
 # Ensure that OpenJDK8 is present
 - name: ensure that OpenJDK8 is present

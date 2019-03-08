@@ -6,27 +6,27 @@
     name: openjdk8
 
 # Ensure that the Neo4j user, group and project are present
-- name: ensure presence of neo4j group
+- name: ensure presence of {{ neo4j_group }} group
   group:
     gid: 814
-    name: neo4j
+    name: '{{ neo4j_group }}'
 
-- name: ensure presence of neo4j user
+- name: ensure presence of {{ neo4j_user }} user
   user:
     uid: 814
-    name: neo4j
-    group: neo4j
+    name: '{{ neo4j_user }}'
+    group: '{{ neo4j_group }}'
     home: /nonexistent
     create_home: false
     shell: /usr/bin/false
     comment: Neo4j daemon user
 
-- name: ensure precence of neo4j project
-  command: projadd -U neo4j -G neo4j -c "Neo4j server" -K "process.max-file-descriptor=(basic,65536,deny)" neo4j
+- name: ensure precence of {{ neo4j_project }} project
+  command: projadd -U {{ neo4j_user }} -G {{ neo4j_group }} -c "Neo4j server" -K "process.max-file-descriptor=(basic,65536,deny)" {{ neo4j_project }}
   ignore_errors: true
 
 # Ensure that a dataset has been created for neo4j
-- name: 'ensure that neo4j ZFS dataset exists at {{ neo4j_data_path }}'
+- name: ensure that neo4j ZFS dataset exists at {{ neo4j_data_path }}
   when: delegated_dataset is succeeded
   zfs:
     name: '{{ ansible_mounts.0.device }}/data/neo4j'
@@ -36,7 +36,7 @@
       recordsize: 16k
 
 # Ensure that all root owned directories exist and have the proper permissions
-- name: 'ensure that root owned Neo4j directories exist and have the proper permissions'
+- name: ensure that root owned Neo4j directories exist and have the proper permissions
   file:
     path: '{{ item }}'
     state: directory
@@ -48,13 +48,13 @@
   - '{{ neo4j_conf_path }}'
 
 # Download and install Neo4j
-- name: 'ensure that Neo4j {{ neo4j_version }} has been downloaded'
+- name: ensure that Neo4j {{ neo4j_version }} has been downloaded
   get_url:
     url: 'https://neo4j.com/artifact.php?name=neo4j-community-{{ neo4j_version }}-unix.tar.gz'
     dest: '/tmp/neo4j-community-{{ neo4j_version }}-unix.tar.gz'
     checksum: '{{ checksum[neo4j_version] }}'
 
-- name: 'ensure that Neo4j {{ neo4j_version }} has been installed'
+- name: ensure that Neo4j {{ neo4j_version }} has been installed
   unarchive:
     src: '/tmp/neo4j-community-{{ neo4j_version }}-unix.tar.gz'
     dest: '{{ neo4j_path }}'
@@ -80,27 +80,25 @@
   - conf
 
 # Symlink the conf and data directories
-- name: 'ensure presence of {{ neo4j_path }}/conf -> {{ neo4j_conf_path }} symlink'
+- name: ensure presence of required symlinks
   file:
-    src: '{{ neo4j_conf_path }}'
+    src:   '{{ item.src }}'
+    path:  '{{ item.path }}'
+    state: link
+    force: true
+  with_items:
+  - src:  '{{ neo4j_conf_path }}'
     path: '{{ neo4j_path }}/conf'
-    state: link
-    force: true
-
-- name: 'ensure presence of {{ neo4j_path }}/data -> {{ neo4j_data_path }} symlink'
-  file:
-    src: '{{ neo4j_data_path }}'
+  - src:  '{{ neo4j_data_path }}'
     path: '{{ neo4j_path }}/data'
-    state: link
-    force: true
 
 # Ensure that all Neo4j owned directories exist and have the proper permissions
-- name: 'ensure that neo4j owned directories exist and have the proper permissions'
+- name: ensure that neo4j owned directories exist and have the proper permissions
   file:
     path: '{{ item }}'
     state: directory
-    owner: neo4j
-    group: neo4j
+    owner: '{{ neo4j_user }}'
+    group: '{{ neo4j_group }}'
     mode: 0700
   with_items:
   - '{{ neo4j_data_path }}'
@@ -135,3 +133,4 @@
   service:
     name: 'svc:/neo4j:default'
     enabled: true
+  register: neo4j_enabled

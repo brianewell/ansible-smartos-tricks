@@ -1,5 +1,6 @@
 ---
 - name: restart neo4j
+  when: not neo4j_enabled.changed
   service:
     name: 'svc:/neo4j:default'
     state: restarted

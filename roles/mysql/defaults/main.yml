@@ -1,2 +1,2 @@
 ---
-  mysql_fork: mariadb
+mysql_fork: mariadb

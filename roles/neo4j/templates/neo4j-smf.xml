@@ -10,14 +10,14 @@
     <dependency name='filesystem' grouping='require_all' restart_on='error' type='service'>
       <service_fmri value='svc:/system/filesystem/local'/>
     </dependency>
-    <method_context project='neo4j' working_directory='/var/db/neo4j'>
-      <method_credential group='neo4j' user='neo4j'/>
+    <method_context project='{{ neo4j.project }}' working_directory='{{ neo4j.data_path }}'>
+      <method_credential user='{{ neo4j.user }}' group='{{ neo4j.group }}'/>
       <method_environment>
         <envvar name='JAVA_HOME' value='/opt/local/java/openjdk8'/>
         <envvar name='PATH' value='/opt/local/sbin:/opt/local/bin:/usr/sbin:/usr/bin'/>
       </method_environment>
     </method_context>
-    <exec_method name='start' type='method' exec='/opt/local/neo4j/bin/neo4j start' timeout_seconds='60'/>
+    <exec_method name='start' type='method' exec='{{ neo4j.path }}/bin/neo4j start' timeout_seconds='60'/>
     <exec_method name='stop' type='method' exec=':kill' timeout_seconds='60'/>
     <property_group name='startd' type='framework'>
       <propval name='duration' type='astring' value='contract'/>

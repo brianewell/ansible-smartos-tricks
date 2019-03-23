@@ -1,2 +1,4 @@
 ---
-mysql_fork: mariadb
+mysql:
+  fork: mariadb
+  recordsize: 16k

@@ -1,8 +1,10 @@
 ---
-neo4j_user: neo4j
-neo4j_group: neo4j
-neo4j_project: neo4j
-neo4j_path: /opt/local/neo4j
-neo4j_conf_path: /opt/local/etc/neo4j
-neo4j_data_path: /var/db/neo4j
-neo4j_version: '3.5.3'
+neo4j:
+  user: neo4j
+  group: neo4j
+  project: neo4j
+  path: /opt/local/neo4j
+  conf_path: /opt/local/etc/neo4j
+  data_path: /var/db/neo4j
+  recordsize: 16k
+  version: '3.5.3'

@@ -118,7 +118,7 @@
   command: svccfg import /tmp/neo4j-smf.xml
 
 - name: ensure that Neo4j is enabled
+  register: neo4j_enabled
   service:
     name: 'svc:/neo4j:default'
     enabled: true
-  register: neo4j_enabled

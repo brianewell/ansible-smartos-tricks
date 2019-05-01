@@ -24,6 +24,7 @@
     mode: 0700
 
 - name: ensure that {{ mysql.fork }}-server is enabled
+  register: mysql_enabled
   service:
     name: 'svc:/pkgsrc/{{ mysql.fork }}:default'
     enabled: true

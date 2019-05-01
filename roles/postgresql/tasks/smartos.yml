@@ -35,6 +35,7 @@
   notify: restart postgresql-server
 
 - name: ensure that postgresql-server is enabled
+  register: postgresql_enabled
   service:
     name: 'svc:/pkgsrc/postgresql:default'
     enabled: true

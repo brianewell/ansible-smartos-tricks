@@ -1,5 +1,6 @@
 ---
 - name: restart {{ mysql.fork }}-server
+  when: not mysql_enabled.changed
   service:
     name: 'svc:/pkgsrc/{{ mysql.fork }}:default'
     state: restarted

@@ -10,19 +10,6 @@
     name: ghost-cli
     global: true
 
-- name: ensure presence of {{ ghost.group }} group
-  group:
-    name: '{{ ghost.group }}'
-
-- name: ensure presence of {{ ghost.user }} user
-  user:
-    name: '{{ ghost.user }}'
-    group: '{{ ghost.group }}'
-
-- name: ensure presence of {{ ghost.project }} project
-  command: projadd -U {{ ghost.user }} -G {{ ghost.group }} -c "Ghost server" -K "process.max-file-descriptor=(basic,65536,deny)" {{ ghost.project }}
-  ignore_errors: true
-
 - name: ensure the existence of ghost ZFS dataset at {{ ghost.path }}
   when: delegated_dataset is succeeded
   zfs:
@@ -30,6 +17,20 @@
     state: present
     extra_zfs_properties:
       mountpoint: '{{ ghost.path }}'
+
+- name: ensure presence of {{ ghost.group }} group
+  group:
+    name: '{{ ghost.group }}'
+
+- name: ensure presence of {{ ghost.user }} user
+  user:
+    name: '{{ ghost.user }}'
+    home: '{{ ghost.path }}'
+    group: '{{ ghost.group }}'
+
+- name: ensure presence of {{ ghost.project }} project
+  command: projadd -U {{ ghost.user }} -G {{ ghost.group }} -c "Ghost server" -K "process.max-file-descriptor=(basic,65536,deny)" {{ ghost.project }}
+  ignore_errors: true
 
 - name: ensure correct permissions of {{ ghost.path }}
   file:

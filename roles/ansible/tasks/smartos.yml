@@ -49,6 +49,7 @@
   notify: restart redis
 
 - name: ensure that redis has been enabled
+  register: redis_enabled
   service:
     name: 'svc:/pkgsrc/redis:default'
     enabled: true

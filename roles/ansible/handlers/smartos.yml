@@ -1,5 +1,6 @@
 ---
 - name: restart redis
+  when: not redis_enabled.changed
   service:
     name: 'svc:/pkgsrc/redis:default'
     state: restarted

@@ -1,11 +1,15 @@
 ---
+- hosts: ansible
+  roles:
+  - ansible
+
 - hosts: common
   roles:
   - common
 
-- hosts: ansible
+- hosts: ghost
   roles:
-  - ansible
+  - ghost
 
 - hosts: mysql
   roles:
@@ -14,6 +18,10 @@
 - hosts: neo4j
   roles:
   - neo4j
+
+- hosts: nginx
+  roles:
+  - nginx
 
 - hosts: postgresql
   roles:

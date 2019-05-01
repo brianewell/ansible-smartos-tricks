@@ -1,0 +1,28 @@
+{
+	"url": "{{ ghost.url }}",
+
+	"database": {
+		"client": "mysql",
+		"connection": {
+			"host": "{{ ghost.db_host }}",
+			"user": "{{ ghost.db_user }}",
+			"password": "{{ ghost_db_pass }}",
+			"database": "{{ ghost.db_name }}"
+		}
+	},
+
+	"mail": {
+		"transport": "Direct"
+	},
+
+	"server": {
+		{% if ghost.http_host is defined and ghost.http_port is defined %}
+			"host": "{{ ghost.http_host }}",
+			"port": {{ ghost.http_port }}
+		{% elif ghost.socket is defined %}
+			"socket": "{{ ghost.socket }}"
+		{% endif %}
+	},
+
+	"logging": { "transports": [ "stdout" ] }
+}

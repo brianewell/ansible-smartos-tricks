@@ -16,12 +16,12 @@
 	},
 
 	"server": {
-		{% if ghost.http_host is defined and ghost.http_port is defined %}
-			"host": "{{ ghost.http_host }}",
-			"port": {{ ghost.http_port }}
-		{% elif ghost.socket is defined %}
-			"socket": "{{ ghost.socket }}"
-		{% endif %}
+{% if ghost.http_host is defined and ghost.http_port is defined %}
+		"host": "{{ ghost.http_host }}",
+		"port": {{ ghost.http_port }}
+{% elif ghost.socket is defined %}
+		"socket": "{{ ghost.socket }}"
+{% endif %}
 	},
 
 	"logging": { "transports": [ "stdout" ] }

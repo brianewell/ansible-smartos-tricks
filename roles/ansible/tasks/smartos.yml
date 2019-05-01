@@ -1,6 +1,4 @@
-# Written for Ansible v2.6.3 at 2018-09-22
 ---
-# Install as much as we can through pkgin, so we can avoid installing a compiler locally
 - name: ensure that prerequisite software has been installed
   pkgin:
     name:
@@ -11,14 +9,12 @@
     - py27-pip
     - redis
 
-# Update pip through pip, as it tends to be maintained better there than it is through pkgin
-- name: ensure that pip is at the latest version
+- name: ensure that pip has been updated to its latest version
   pip:
     name: pip
     state: latest
 
-# Install Ansible through pip to get at the latest version
-- name: ensure that ansible is at the latest version
+- name: ensure that ansible has been updated to its latest version
   pip:
     name:
     - ansible
@@ -27,7 +23,6 @@
     - redis
     state: latest
 
-# Configure Ansible to make use of a redis cache
 - name: ensure existance of ansible configuration directory
   file:
     path: /etc/ansible
@@ -35,6 +30,7 @@
     owner: root
     group: root
     mode: 0755
+
 - name: ensure that ansible has been configured
   template:
     src: ansible.cfg
@@ -43,7 +39,6 @@
     group: root
     mode: 0644
 
-# Configure and enable redis
 - name: ensure that redis has been configured
   template:
     src: redis.conf
@@ -52,6 +47,7 @@
     group: root
     mode: 0644
   notify: restart redis
+
 - name: ensure that redis has been enabled
   service:
     name: 'svc:/pkgsrc/redis:default'

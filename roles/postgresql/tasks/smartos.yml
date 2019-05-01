@@ -1,6 +1,4 @@
-# Written for PostgreSQL 10.5 at 2018-11-11
 ---
-# Ensure that a dataset has been created for PostgreSQL
 - name: ensure presence of postgresql ZFS dataset
   when: delegated_dataset is succeeded
   zfs:
@@ -10,7 +8,6 @@
       mountpoint: /var/pgsql
       recordsize: 16k
 
-# Ensure that PostgreSQL server mountpoint is secure
 - name: ensure secure permissions on postgresql ZFS mountpoint
   file:
     path: /var/pgsql
@@ -19,13 +16,11 @@
     group: 907
     mode: 0700
 
-# Ensure that PostgreSQL server is installed
 - name: ensure presence of {{ postgresql_server }}
   pkgin:
     name: '{{ postgresql_server }}'
   notify: restart postgresql-server
 
-# Ensure that PostgreSQL server is configured to take advantage of ZFS
 - name: ensure that postgresql-server is properly configured
   template:
     src: '{{ item }}'
@@ -39,7 +34,6 @@
     - pg_ident.conf
   notify: restart postgresql-server
 
-# Ensure that PostgreSQL server is enabled in SMF
 - name: ensure that postgresql-server is enabled
   service:
     name: 'svc:/pkgsrc/postgresql:default'

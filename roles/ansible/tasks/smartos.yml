@@ -1,5 +1,5 @@
 ---
-- name: ensure that prerequisite software has been installed
+- name: ensure that pkgin managed software has been installed
   pkgin:
     name:
     - libyaml

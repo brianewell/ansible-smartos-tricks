@@ -1,5 +1,5 @@
 ---
-- name: 'restart {{ mysql.fork }}-server'
+- name: restart {{ mysql.fork }}-server
   service:
     name: 'svc:/pkgsrc/{{ mysql.fork }}:default'
     state: restarted

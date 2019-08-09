@@ -16,9 +16,9 @@
     group: 907
     mode: 0700
 
-- name: ensure presence of {{ postgresql_server }}
+- name: ensure presence of {{ postgresql.server }}
   pkgin:
-    name: '{{ postgresql_server }}'
+    name: '{{ postgresql.server }}'
   notify: restart postgresql-server
 
 - name: ensure that postgresql-server is properly configured

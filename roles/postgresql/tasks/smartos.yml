@@ -6,7 +6,7 @@
     state: present
     extra_zfs_properties:
       mountpoint: /var/pgsql
-      recordsize: 16k
+      recordsize: '{{ postgresql.recordsize }}'
 
 - name: ensure secure permissions on postgresql ZFS mountpoint
   file:

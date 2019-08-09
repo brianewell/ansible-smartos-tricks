@@ -4,3 +4,4 @@ postgresql:
   locale: C
   max_connections: 100
   shared_buffers: 128MB
+  recordsize: 16k

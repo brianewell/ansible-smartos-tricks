@@ -1,0 +1,71 @@
+---
+minecraft:
+  server:  mojang
+  version: 1.14.4
+  path:    /var/games/minecraft
+  eula:    true
+  user:    minecraft
+  group:   minecraft
+  project: minecraft
+  quota:   none
+  parameters:
+  - Xms2G
+  - Xmx2G
+  - XX:+UseG1GC
+  - XX:+UnlockExperimentalVMOptions
+  - XX:MaxGCPauseMillis=100
+  - XX:+DisableExplicitGC
+  - XX:TargetSurvivorRatio=90
+  - XX:G1NewSizePercent=50
+  - XX:G1MaxNewSizePercent=80
+  - XX:G1MixedGCLiveThresholdPercent=35
+  - XX:+AlwaysPreTouch
+  - XX:+ParallelRefProcEnabled
+  - XX:+UseLargePages
+  - XX:+UseLargePagesInMetaspace
+  - showversion
+  properties:
+    allow_flight: false
+    allow_nether: true
+    broadcast_console_to_ops: true
+    broadcast_rcon_to_ops: true
+    difficulty: easy
+    enable_command_block: false
+    enable_query: false
+    enable_rcon: false
+    enforce_whitelist: false
+    force_gamemode: false
+    function_permission_level: 2
+    gamemode: survival
+    generate_structures: true
+    generator_settings:
+    hardcore: false
+    level_name: world
+    level_seed:
+    level_type: default
+    max_build_height: 256
+    max_players: 20
+    max_tick_time: 60000
+    max_world_size: 29999984
+    motd: A Minecraft Server
+    network_compression_threshold: 256
+    online_mode: true
+    op_permission_level: 4
+    player_idle_timeout: 0
+    prevent_proxy_connections: false
+    pvp: true
+    query_port: 25565
+    rcon_password:
+    rcon_port: 25575
+    resource_pack_sha1:
+    resource_pack:
+    server_ip:
+    server_port: 25565
+    snooper_enabled: true
+    spawn_animals: true
+    spawn_monsters: true
+    spawn_npcs: true
+    spawn_protection: 16
+    use_native_transport: true
+    view_distance: 10
+    white_list: false

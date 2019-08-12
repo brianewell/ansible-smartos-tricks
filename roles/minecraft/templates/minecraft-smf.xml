@@ -1,0 +1,55 @@
+<?xml version='1.0'?>
+<!DOCTYPE service_bundle SYSTEM '/usr/share/lib/xml/dtd/service_bundle.dtd.1'>
+<service_bundle type='manifest' name='minecraft'>
+	<service type='service' name='minecraft' version='0'>
+
+		<create_default_instance enabled='false'/>
+		<single_instance/>
+
+		<dependency type='service' name='network' grouping='require_all' restart_on='error'>
+			<service_fmri value='svc:/milestone/network:default'/>
+		</dependency>
+
+		<dependency type='service' name='filesystem' grouping='require_all' restart_on='error'>
+			<service_fmri value='svc:/system/filesystem/local'/>
+		</dependency>
+
+		<method_context project='{{ minecraft.project }}' working_directory='{{ minecraft.path }}'>
+			<method_credential user='{{ minecraft.user }}' group='{{ minecraft.group }}'/>
+			<method_environment>
+				<envvar name='JAVA_HOME' value='/opt/local/java/openjdk8'/>
+				<envvar name='PATH' value='/opt/local/bin:/usr/bin'/>
+			</method_environment>
+		</method_context>
+
+		<exec_method type='method' name='start' exec='/opt/local/java/openjdk8/bin/java %{options/parameters} -jar server.jar nogui' timeout_seconds='60'/>
+		<exec_method type='method' name='stop' exec=':kill' timeout_seconds='30'/>
+
+		<property_group type='service' name='options'>
+			<property type='astring' name='parameters'>
+				<astring_list>
+{% for parameter in minecraft.parameters %}
+					<value_node value='-{{ parameter }}'/>
+{% endfor %}
+				</astring_list>
+			</property>
+		</property_group>
+
+		<property_group type='framework' name='general'>
+			<propval type='astring' name='action_authorization' value='solaris.smf.manage.minecraft'/>
+			<propval type='astring' name='value_authorization' value='solaris.smf.value.minecraft'/>
+		</property_group>
+
+		<property_group type='framework' name='startd'>
+			<propval type='astring' name='duration' value='child'/>
+			<propval type='astring' name='ignore_error' value='core,signal'/>
+		</property_group>
+
+		<stability value='Evolving'/>
+		<template>
+			<common_name>
+				<loctext xml:lang='C'>Minecraft Game Server</loctext>
+			</common_name>
+		</template>
+	</service>
+</service_bundle>

@@ -11,6 +11,10 @@
   roles:
   - ghost
 
+- hosts: minecraft
+  roles:
+  - minecraft
+
 - hosts: mysql
   roles:
   - mysql

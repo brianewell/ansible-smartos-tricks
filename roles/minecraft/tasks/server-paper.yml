@@ -1,0 +1,5 @@
+---
+- name: ensure that server-{{ minecraft.server }}-{{ minecraft.version }}.jar has been downloaded
+  get_url:
+    url: 'https://papermc.io/api/v1/paper/{{ minecraft.version.replace("-","/") }}/download'
+    dest: '{{ minecraft.path }}/server-{{ minecraft.server }}-{{ minecraft.version }}.jar'

@@ -1,0 +1,8 @@
+---
+ansible:
+  pipelining: true
+  gathering: smart
+  caching: redis
+  caching_timeout: 3600
+  caching_host: localhost:6379:0 
+  hash_behavior: merge

@@ -1,3 +1,5 @@
+{{ configuration_header }}
+
 EXCEED_TRAD=silent
 {% if delegated_dataset is succeeded %}
 MANAGE_ZFS=yes

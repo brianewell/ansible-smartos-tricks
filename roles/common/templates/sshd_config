@@ -1,3 +1,5 @@
+{{ configuration_header }}
+
 {% for key,value in sshd.config|dictsort %}
 {{ key }} {{ value }}
 {% endfor %}

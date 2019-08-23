@@ -1,3 +1,5 @@
+{{ configuration_header }}
+
 {% for key,value in inputrc.config|dictsort %}
 set {{ key }} {{ value }}
 {% endfor %}

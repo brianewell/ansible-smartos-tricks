@@ -1,6 +1,0 @@
----
-- name: restart minecraft
-  when: not minecraft_enabled.changed
-  service:
-    name: 'svc:/minecraft:default'
-    state: restarted

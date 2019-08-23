@@ -1,3 +1,6 @@
 ---
-- import_tasks: smartos.yml
-  when: ansible_distribution|lower == 'smartos'
+- name: restart postgresql-server
+  when: not postgresql_enabled.changed
+  service:
+    name: 'svc:/pkgsrc/postgresql:default'
+    state: restarted

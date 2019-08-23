@@ -1,3 +1,100 @@
 ---
-- import_tasks: smartos.yml
-  when: ansible_distribution|lower == 'smartos'
+- name: ensure that nodejs and npm are installed
+  pkgin:
+    name:
+    - nodejs
+    - npm
+
+- name: ensure that ghost-cli is installed
+  npm:
+    name: ghost-cli
+    global: true
+
+- name: ensure the existence of ghost ZFS dataset at {{ ghost.path }}
+  when: delegated_dataset is succeeded
+  zfs:
+    name: '{{ ansible_mounts.0.device }}/data/{{ ghost.dataset }}'
+    state: present
+    extra_zfs_properties:
+      mountpoint: '{{ ghost.path }}'
+
+- name: ensure presence of {{ ghost.group }} group
+  group:
+    name: '{{ ghost.group }}'
+
+- name: ensure presence of {{ ghost.user }} user
+  user:
+    name: '{{ ghost.user }}'
+    home: '{{ ghost.path }}'
+    group: '{{ ghost.group }}'
+
+- name: ensure presence of {{ ghost.project }} project
+  command: projadd -U {{ ghost.user }} -G {{ ghost.group }} -c "Ghost server" -K "process.max-file-descriptor=(basic,65536,deny)" {{ ghost.project }}
+  ignore_errors: true
+
+- name: ensure correct permissions of {{ ghost.path }}
+  file:
+    path: '{{ ghost.path }}'
+    state: directory
+    owner: '{{ ghost.user }}'
+    group: '{{ ghost.group }}'
+    mode: 0755
+
+- name: ensure a randomized password for the Ghost MySQL user
+  set_fact:
+    ghost_db_pass: "{{ lookup( 'password', '/dev/null' ) }}"
+
+- name: ensure the existence of MySQL database {{ ghost.db_name }}
+  mysql_db:
+    name: '{{ ghost.db_name }}'
+
+- name: ensure the existence of MySQL user {{ ghost.db_user }}
+  mysql_user:
+    host: '{{ ghost.db_host }}'
+    name: '{{ ghost.db_user }}'
+    password: '{{ ghost_db_pass }}'
+    priv: '{{ ghost.db_name }}.*:ALL'
+
+# Attempt to update Ghost before installing.  This will avoid performing both operations
+
+- name: ensure that ghost is up to date
+  become: true
+  become_user: '{{ ghost.user }}'
+  command: ghost update
+  args:
+    chdir: '{{ ghost.path }}'
+    removes: '{{ ghost.path }}/*'
+
+- name: ensure that ghost is installed
+  become: true
+  become_user: '{{ ghost.user }}'
+  command: ghost install --no-stack --no-setup --no-check-mem --no-start --no-enable
+  args:
+    chdir: '{{ ghost.path }}'
+    creates: '{{ ghost.path }}/*'
+
+- name: ensure that ghost is configured {{ ghost.url }}
+  notify: restart ghost
+  template:
+    src:   config.json
+    dest:  '{{ ghost.path }}/config.{{ ghost.env }}.json'
+    owner: '{{ ghost.user }}'
+    group: '{{ ghost.group }}'
+    mode:  0644
+
+- name: ensure presence of Ghost SMF manifest
+  template:
+    src: ghost-smf.xml
+    dest: /tmp/ghost-smf.xml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: ensure that Ghost SMF manifest has been imported
+  command: svccfg import /tmp/ghost-smf.xml
+
+- name: ensure that ghost is enabled
+  register: ghost_enabled
+  service:
+    name: 'svc:/ghost:default'
+    enabled: true

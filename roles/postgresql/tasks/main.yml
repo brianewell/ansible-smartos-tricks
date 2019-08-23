@@ -1,3 +1,41 @@
 ---
-- import_tasks: smartos.yml
-  when: ansible_distribution|lower == 'smartos'
+- name: ensure presence of postgresql ZFS dataset
+  when: delegated_dataset is succeeded
+  zfs:
+    name: '{{ ansible_mounts.0.device }}/data/pgsql'
+    state: present
+    extra_zfs_properties:
+      mountpoint: /var/pgsql
+      recordsize: '{{ postgresql.recordsize }}'
+
+- name: ensure secure permissions on postgresql ZFS mountpoint
+  file:
+    path: /var/pgsql
+    state: directory
+    owner: 907
+    group: 907
+    mode: 0700
+
+- name: ensure presence of {{ postgresql.server }}
+  pkgin:
+    name: '{{ postgresql.server }}'
+  notify: restart postgresql-server
+
+- name: ensure that postgresql-server is properly configured
+  template:
+    src: '{{ item }}'
+    dest: '/var/pgsql/data/{{ item }}'
+    owner: postgres
+    group: postgres
+    mode: 0600
+  with_items:
+    - postgresql.conf
+    - pg_hba.conf
+    - pg_ident.conf
+  notify: restart postgresql-server
+
+- name: ensure that postgresql-server is enabled
+  register: postgresql_enabled
+  service:
+    name: 'svc:/pkgsrc/postgresql:default'
+    enabled: true

@@ -1,3 +1,9 @@
 ---
-- import_tasks: smartos.yml
-  when: ansible_distribution|lower == 'smartos'
+- name: remove delegated mountpoint
+  file:
+    path: '/zones'
+    state: absent
+- name: restart sshd
+  service:
+    name: 'svc:/network/ssh:default'
+    state: restarted

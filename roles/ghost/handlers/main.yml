@@ -1,3 +1,6 @@
 ---
-- import_tasks: smartos.yml
-  when: ansible_distribution|lower == 'smartos'
+- name: restart ghost
+  when: not ghost_enabled.changed
+  service:
+    name: 'svc:/ghost:default'
+    state: restarted

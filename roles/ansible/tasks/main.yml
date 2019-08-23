@@ -1,3 +1,55 @@
 ---
-- import_tasks: smartos.yml
-  when: ansible_distribution|lower == 'smartos'
+- name: ensure that pkgin managed software has been installed
+  pkgin:
+    name:
+    - libyaml
+    - py27-bcrypt
+    - py27-cryptography
+    - py27-nacl
+    - py27-pip
+    - redis
+
+- name: ensure that pip has been updated to its latest version
+  pip:
+    name: pip
+    state: latest
+
+- name: ensure that ansible has been updated to its latest version
+  pip:
+    name:
+    - ansible
+    - netaddr
+    - pywinrm>=0.3.0
+    - redis
+    state: latest
+
+- name: ensure existance of ansible configuration directory
+  file:
+    path: /etc/ansible
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: ensure that ansible has been configured
+  template:
+    src: ansible.cfg
+    dest: /etc/ansible/ansible.cfg
+    owner: root
+    group: root
+    mode: 0644
+
+- name: ensure that redis has been configured
+  template:
+    src: redis.conf
+    dest: /opt/local/etc/redis.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart redis
+
+- name: ensure that redis has been enabled
+  register: redis_enabled
+  service:
+    name: 'svc:/pkgsrc/redis:default'
+    enabled: true

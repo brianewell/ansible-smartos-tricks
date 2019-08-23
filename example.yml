@@ -1,32 +1,11 @@
 ---
-- hosts: ansible
-  roles:
-  - ansible
-
-- hosts: common
-  roles:
-  - common
-
-- hosts: ghost
-  roles:
-  - ghost
-
-- hosts: minecraft
-  roles:
-  - minecraft
-
-- hosts: mysql
-  roles:
-  - mysql
-
-- hosts: neo4j
-  roles:
-  - neo4j
-
-- hosts: nginx
-  roles:
-  - nginx
-
-- hosts: postgresql
-  roles:
-  - postgresql
+#
+# The common role performs the common configuration and decrufting steps for a base SmartOS zone
+#
+#- hosts: common
+#  roles:
+#  - common
+#  vars:
+#    ansible_python_interpreter: # allows the user to specify a python intrepreter other than the SmartOS default of /opt/local/bin/python
+#
+#

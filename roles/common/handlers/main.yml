@@ -3,6 +3,7 @@
   file:
     path: '/zones'
     state: absent
+
 - name: restart sshd
   service:
     name: 'svc:/network/ssh:default'

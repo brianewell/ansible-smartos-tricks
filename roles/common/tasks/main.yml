@@ -5,17 +5,16 @@
     enabled: false
 
 - name: ensure that the delegated ZFS dataset is unmounted
+  ignore_errors: true
+  notify: remove delegated mountpoint
+  register: delegated_dataset
   zfs:
     name: '{{ ansible_mounts.0.device }}/data'
     state: present
     extra_zfs_properties:
       mountpoint: none
-  ignore_errors: true
-  register: delegated_dataset
-  notify: remove delegated mountpoint
 
-- name: ensure that useradd is configured to manage ZFS datasets
-  when: delegated_dataset is succeeded
+- name: ensure that useradd is properly configured
   template:
     src: useradd
     dest: /etc/default/useradd
@@ -32,13 +31,13 @@
     mode: 0644
 
 - name: ensure that sshd is securely configured
+  notify: restart sshd
   template:
     src: sshd_config
     dest: /etc/ssh/sshd_config
     owner: root
     group: root
     mode: 0644
-  notify: restart sshd
 
 - name: ensure that the pkgsrc cache has been updated
   pkgin:

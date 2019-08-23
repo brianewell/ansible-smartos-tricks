@@ -6,6 +6,17 @@
 #  roles:
 #  - common
 #  vars:
-#    ansible_python_interpreter: # allows the user to specify a python intrepreter other than the SmartOS default of /opt/local/bin/python
+#    ansible_python_interpreter: /opt/local/bin/python # specify a python intrepreter other than the SmartOS default
+#    inputrc:
+#      config: {}   # specify additional inputrc configuration parameters
+#      bindings: {} # specify additional inputrc key-bindings
+#    sshd:
+#      key_types: [dsa, ecdsa, ed25519, rsa ] # specify sshd host key types
+#      config: {}   # specify additional sshd configuration parameters
 #
 #
+# The ansible role installs and configures a base SmartOS zone to act as an Ansible host to run this, and any other playbooks, templates and modules.
+#
+- hosts: ansible
+  roles:
+  - ansible

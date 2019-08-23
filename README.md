@@ -8,4 +8,8 @@ The common role performs the configuration and decrufting steps for a base Smart
 
 ### Configurable variables
 
-* **ansible_python_intrepreter**: This parameter can be overridden from it's SmartOS default of `/opt/local/bin/python`
+* **ansible_python_intrepreter**: String that can override the SmartOS default of `/opt/local/bin/python`
+* **inputrc.config**: Dictionary that can be merged with existing inputrc configuration parameters
+* **inputrc.bindings**: Dictionary that can be merged with existing inputrc key-bindings
+* **sshd.key_types**: List that can override the default of dsa, ecdsa, ed25519 and rsa
+* **sshd.config**: Dictionary that can be merged with existing sshd configuration parameters

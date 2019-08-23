@@ -1,29 +1,7 @@
-ChallengeResponseAuthentication no
-GSSAPIAuthentication no
-GSSAPIKeyExchange no
-GatewayPorts no
-HostKey /var/ssh/ssh_host_dsa_key
-HostKey /var/ssh/ssh_host_ecdsa_key
-HostKey /var/ssh/ssh_host_ed25519_key
-HostKey /var/ssh/ssh_host_rsa_key
-IgnoreRhosts yes
-KeepAlive yes
-ListenAddress ::
-LogLevel info
-LoginGraceTime 600
-MaxAuthTries 6
-PasswordAuthentication no
-PermitEmptyPasswords no
-PermitRootLogin without-password
-PermitUserEnvironment yes
-Port 22
-PrintMotd no
-Protocol 2
-PubKeyPlugin libsmartsshd.so
-StrictModes yes
-Subsystem sftp internal-sftp
-SyslogFacility auth
-X11DisplayOffset 10
-X11Forwarding yes
-X11UseLocalhost yes
-XAuthLocation /opt/local/bin/xauth
+{% for key,value in sshd.config|dictsort %}
+{{ key }} {{ value }}
+{% endfor %}
+
+{% for key_type in sshd.key_types|sort %}
+HostKey /var/ssh/ssh_host_{{ key_type }}_key
+{% endfor %}

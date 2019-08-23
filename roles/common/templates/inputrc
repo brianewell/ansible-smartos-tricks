@@ -1,7 +1,7 @@
-"\e[1~": beginning-of-line
-"\e[4~": end-of-line
-"\eOC": forward-word
-"\eOD": backward-word
-"\e[5~": history-search-backward
-"\e[6~": history-search-forward
-"\e[3~": delete-char
+{% for key,value in inputrc.config|dictsort %}
+set {{ key }} {{ value }}
+{% endfor %}
+
+{% for key,value in inputrc.bindings|dictsort %}
+"{{ key }}": {{ value }}
+{% endfor %}

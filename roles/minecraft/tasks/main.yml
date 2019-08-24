@@ -35,7 +35,7 @@
   ignore_errors: true
 
 - name: ensure presence of Minecraft ZFS dataset at {{ minecraft.path }}
-  when: delegated_dataset is succeeded
+  when: delegate_dataset is succeeded
   zfs:
     name: '{{ ansible_mounts.0.device }}/data/minecraft'
     state: present

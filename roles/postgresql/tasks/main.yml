@@ -1,6 +1,6 @@
 ---
 - name: ensure presence of postgresql ZFS dataset
-  when: delegated_dataset is succeeded
+  when: delegate_dataset is succeeded
   zfs:
     name: '{{ ansible_mounts.0.device }}/data/pgsql'
     state: present

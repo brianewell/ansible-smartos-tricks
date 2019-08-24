@@ -23,7 +23,7 @@
   ignore_errors: true
 
 - name: ensure presence of neo4j ZFS filesystem at {{ neo4j.data_path }}
-  when: delegated_dataset is succeeded
+  when: delegate_dataset is succeeded
   zfs:
     name: '{{ ansible_mounts.0.device }}/data/neo4j'
     state: present

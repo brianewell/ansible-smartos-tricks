@@ -1,6 +1,6 @@
 ---
 - name: ensure presence of mysql ZFS filesystem
-  when: delegated_dataset is succeeded
+  when: delegate_dataset is succeeded
   zfs:
     name: '{{ ansible_mounts.0.device }}/data/mysql'
     state: present

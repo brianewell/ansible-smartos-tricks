@@ -7,7 +7,7 @@
 - name: ensure that the delegated ZFS filesystem is unmounted
   ignore_errors: true
   notify: remove delegated mountpoint
-  register: delegated_dataset
+  register: delegate_dataset
   zfs:
     name: '{{ ansible_mounts.0.device }}/data'
     state: present

@@ -24,3 +24,14 @@
 #    ansible:
 #      config:
 #        default: {} # specify additional configuration parameters
+#
+#
+# The mysql role installs and configures MySQL on a base SmartOS zone
+#
+# - hosts: mysql
+#   roles:
+#   - mysql
+#   vars:
+#     mysql:
+#       server: mariadb # specify a specific MySQL fork ( mariadb | mysql | percona )
+#       recordsize: 16k # specify the ZFS filesystem recordsize

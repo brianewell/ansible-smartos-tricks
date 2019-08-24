@@ -45,3 +45,15 @@ The neo4j role installs and configures Neo4j on a base SmartOS zone
 * **neo4j.data_path**: Specify the path in which to install the database cluster
 * **neo4j.recordsize**: Specify the recordsize of the underlying ZFS filesystem that the database is installed on (default: 16k)
 * **neo4j.version**: Specify the version of Neo4j to install into the system (default: latest)
+
+## PostgreSQL Role
+
+The postgresql role installs and configures PostgreSQL on a base SmartOS zone
+
+### Configuration Variables
+
+* **postgresql.server**: Specify the version of PostgreSQL to install
+* **postgresql.locale**: Specify the default locale
+* **postgresql.max_connections**: Specify the maximum connection count
+* **postgresql.shared_buffers**: Specify the shared buffer size
+* **postgresql.recordsize**: Specify the ZFS filesystem recordsize

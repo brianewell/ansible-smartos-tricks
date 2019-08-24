@@ -52,3 +52,18 @@
 #       data_path: /var/db/neo4j        # specify the data path
 #       recordsize: 16k                 # specify the ZFS filesystem recordsize
 #       version: '3.5.8'                # specify the version of Neo4j to install
+#
+#
+# The postgresql role installs and configures PostgreSQL on a base SmartOS zone
+#
+# - hosts: postgresql
+#   roles:
+#     - postgresql
+#   vars:
+#     postgresql:
+#       server: postgresql11-server # specify the version of PostgreSQL to install
+#       locale: C                   # specify the default locale
+#       max_connections: 100        # specify the maximum connection count
+#       shared_buffers: 128MB       # specify the shared buffer size
+#       recordsize: 16k             # specify the ZFS filesystem recordsize
+#

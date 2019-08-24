@@ -58,7 +58,7 @@
 #
 # - hosts: postgresql
 #   roles:
-#     - postgresql
+#   - postgresql
 #   vars:
 #     postgresql:
 #       server: postgresql11-server # specify the version of PostgreSQL to install
@@ -67,3 +67,7 @@
 #       shared_buffers: 128MB       # specify the shared buffer size
 #       recordsize: 16k             # specify the ZFS filesystem recordsize
 #
+
+- hosts: common
+  roles:
+  - ansible

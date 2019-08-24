@@ -7,7 +7,6 @@
     - py27-cryptography
     - py27-nacl
     - py27-pip
-    - redis
 
 - name: ensure that pip has been updated to its latest version
   pip:
@@ -38,19 +37,3 @@
     owner: root
     group: root
     mode: 0644
-
-# Redis should be seperated out to its own role
-- name: ensure that redis has been configured
-  template:
-    src: redis.conf
-    dest: /opt/local/etc/redis.conf
-    owner: root
-    group: root
-    mode: 0644
-  notify: restart redis
-
-- name: ensure that redis has been enabled
-  register: redis_enabled
-  service:
-    name: 'svc:/pkgsrc/redis:default'
-    enabled: true

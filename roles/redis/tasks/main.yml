@@ -1,0 +1,19 @@
+---
+- name: ensure that redis has been installed
+  pkgin:
+    name: redis
+
+- name: ensure that redis has been configured
+  notify: restart redis
+  template:
+    src: redis.conf
+    dest: /opt/local/etc/redis.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: ensure that redis has been enabled
+  register: redis_enabled
+  service:
+    name: 'svc:/pkgsrc/redis:default'
+    enabled: true

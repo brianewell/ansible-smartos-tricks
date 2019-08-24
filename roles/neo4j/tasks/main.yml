@@ -22,7 +22,7 @@
   command: projadd -U {{ neo4j.user }} -G {{ neo4j.group }} -c "Neo4j server" -K "process.max-file-descriptor=(basic,65536,deny)" {{ neo4j.project }}
   ignore_errors: true
 
-- name: ensure that neo4j ZFS dataset exists at {{ neo4j.data_path }}
+- name: ensure presence of neo4j ZFS filesystem at {{ neo4j.data_path }}
   when: delegated_dataset is succeeded
   zfs:
     name: '{{ ansible_mounts.0.device }}/data/neo4j'

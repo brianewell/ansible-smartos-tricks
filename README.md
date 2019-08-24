@@ -30,3 +30,18 @@ The mysql role installs and configures MySQL on a base SmartOS zone
 
 * **mysql.server**: Specify a specific fork of the MySQL server (default: mariadb, options: mariadb | mysql | percona )
 * **mysql.recordsize**: Specify the recordsize of the underlying ZFS filesystem that the database is installed on (default: 16k)
+
+## Neo4j Role
+
+The neo4j role installs and configures Neo4j on a base SmartOS zone
+
+### Configuration Variables
+
+* **neo4j.user**: Specify the name of the user
+* **neo4j.group**: Specify the name of the group
+* **neo4j.project**: Specify the name of the project
+* **neo4j.path**: Specify the path in which to install the database software
+* **neo4j.conf_path**: Specify the path in which to store configuration data
+* **neo4j.data_path**: Specify the path in which to install the database cluster
+* **neo4j.recordsize**: Specify the recordsize of the underlying ZFS filesystem that the database is installed on (default: 16k)
+* **neo4j.version**: Specify the version of Neo4j to install into the system (default: latest)

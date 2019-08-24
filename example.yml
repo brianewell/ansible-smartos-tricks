@@ -35,3 +35,20 @@
 #     mysql:
 #       server: mariadb # specify a specific MySQL fork ( mariadb | mysql | percona )
 #       recordsize: 16k # specify the ZFS filesystem recordsize
+#
+#
+# The neo4j role installs and configures Neo4j on a base SmartOS zone
+#
+# - hosts: neo4j
+#   roles:
+#   - neo4j
+#   vars:
+#     neo4j:
+#       user: neo4j                     # specify the user name to use
+#       group: neo4j                    # specify the group name to use
+#       project: neo4j                  # specify the project name to use
+#       path: /opt/local/neo4j          # specify the install path
+#       conf_path: /opt/local/etc/neo4j # specify the configuration path
+#       data_path: /var/db/neo4j        # specify the data path
+#       recordsize: 16k                 # specify the ZFS filesystem recordsize
+#       version: '3.5.8'                # specify the version of Neo4j to install

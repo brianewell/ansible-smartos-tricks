@@ -4,7 +4,7 @@
     name: 'svc:/network/inetd:default svc:/system/sac:default'
     enabled: false
 
-- name: ensure that the delegated ZFS dataset is unmounted
+- name: ensure that the delegated ZFS filesystem is unmounted
   ignore_errors: true
   notify: remove delegated mountpoint
   register: delegated_dataset

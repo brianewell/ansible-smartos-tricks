@@ -13,3 +13,11 @@ The common role performs the configuration and decrufting steps for a base Smart
 * **inputrc.bindings**: Dictionary that can be merged with existing inputrc key-bindings
 * **sshd.key_types**: List that can override the default of dsa, ecdsa, ed25519 and rsa
 * **sshd.config**: Dictionary that can be merged with existing sshd configuration parameters
+
+## Ansible Role
+
+The ansible role installs and configures a base SmartOS zone to act as an Ansible host to run this, and any other playbooks, templates and modules.
+
+### Configurable variables
+
+* **ansible.config.{section name}**: Dictionary that can be merged with existing ansible configuration parameters

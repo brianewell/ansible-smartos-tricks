@@ -39,6 +39,7 @@
     group: root
     mode: 0644
 
+# Redis should be seperated out to its own role
 - name: ensure that redis has been configured
   template:
     src: redis.conf

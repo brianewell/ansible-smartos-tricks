@@ -17,6 +17,10 @@
 #
 # The ansible role installs and configures a base SmartOS zone to act as an Ansible host to run this, and any other playbooks, templates and modules.
 #
-- hosts: ansible
-  roles:
-  - ansible
+#- hosts: ansible
+#  roles:
+#  - ansible
+#  vars:
+#    ansible:
+#      config:
+#        default: {} # specify additional configuration parameters

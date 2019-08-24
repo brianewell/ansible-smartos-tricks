@@ -1,5 +1,5 @@
 ---
-- name: ensure presence of mysql ZFS dataset
+- name: ensure presence of mysql ZFS filesystem
   when: delegated_dataset is succeeded
   zfs:
     name: '{{ ansible_mounts.0.device }}/data/mysql'
@@ -8,12 +8,12 @@
       mountpoint: /var/mysql
       recordsize: '{{ mysql.recordsize }}'
 
-- name: ensure presence of {{ mysql.fork }}-server and pymysql (for ansible configuration of {{ mysql.fork }})
+- name: ensure presence of {{ mysql.server }}-server and pymysql (for ansible configuration of {{ mysql.server }})
+  notify: restart mysql-server
   pkgin:
     name:
-    - '{{ mysql.fork }}-server'
+    - '{{ mysql.server }}-server'
     - py27-pymysql
-  notify: restart {{ mysql.fork }}-server
 
 - name: ensure secure permissions on mysql ZFS mountpoint
   file:
@@ -23,18 +23,18 @@
     group: root
     mode: 0700
 
-- name: ensure that {{ mysql.fork }}-server is enabled
+- name: ensure that {{ mysql.server }}-server is enabled
   register: mysql_enabled
   service:
-    name: 'svc:/pkgsrc/{{ mysql.fork }}:default'
+    name: 'svc:/pkgsrc/{{ mysql.server }}:default'
     enabled: true
 
-- name: ensure absence of {{ mysql.fork }} test database
+- name: ensure absence of {{ mysql.server }} test database
   mysql_db:
     name: test
     state: absent
 
-- name: ensure absence of anonymous {{ mysql.fork }} users
+- name: ensure absence of anonymous {{ mysql.server }} users
   mysql_user:
     name: ''
     host_all: true
@@ -46,11 +46,11 @@
     host: '{{ ansible_hostname }}'
     state: absent
 
-- name: generate a randomized password for the {{ mysql.fork }} root user
+- name: generate a randomized password for the {{ mysql.server }} root user
   set_fact:
     mysql_root_password: "{{ lookup( 'password', '/dev/null' ) }}"
 
-- name: ensure that {{ mysql.fork }} root password is set to the previously generated password
+- name: ensure that {{ mysql.server }} root password is set to the previously generated password
   mysql_user:
     check_implicit_admin: true
     name: root

@@ -9,3 +9,9 @@ ansible:
       hash_behaviour: merge
     ssh_connection:
       pipelining: true
+
+redis:
+  config:
+    databases: 2
+    maxmemory: 10mb
+    maxmemory-policy: volatile-ttl

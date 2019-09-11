@@ -6,7 +6,6 @@ ansible:
       fact_caching: redis
       fact_caching_timeout: 3600
       fact_caching_connection: localhost:6379:0
-      hash_behaviour: merge
     ssh_connection:
       pipelining: true
 

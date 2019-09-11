@@ -11,8 +11,8 @@
 #      config: {}   # specify additional inputrc configuration parameters
 #      bindings: {} # specify additional inputrc key-bindings
 #    sshd:
-#      key_types: [dsa, ecdsa, ed25519, rsa ] # specify sshd host key types
 #      config: {}   # specify additional sshd configuration parameters
+#      key_types: [dsa, ecdsa, ed25519, rsa ] # specify sshd host key types
 #
 #
 # The ansible role installs and configures a base SmartOS zone to act as an Ansible host to run this, and any other playbooks, templates and modules.
@@ -23,7 +23,7 @@
 #  vars:
 #    ansible:
 #      config:
-#        default: {} # specify additional configuration parameters
+#        default: {} # specify additional default configuration parameters
 #
 #
 # The mysql role installs and configures MySQL on a base SmartOS zone
@@ -67,7 +67,12 @@
 #       shared_buffers: 128MB       # specify the shared buffer size
 #       recordsize: 16k             # specify the ZFS filesystem recordsize
 #
-
-- hosts: common
-  roles:
-  - ansible
+#
+# The redis role installs and configures Redis on a base SmartOS zone
+#
+#- hosts: redis
+#  roles:
+#  - redis
+#  vars:
+#    redis:
+#      config: {} # specify additional redis configuration parameters

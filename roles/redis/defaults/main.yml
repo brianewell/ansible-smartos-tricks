@@ -1,1 +1,151 @@
 ---
+redis:
+  config:
+
+# Network
+
+    bind: '::1 127.0.0.1'                # The address or addresses to bind to (IPv4|IPv6)
+    protected-mode: 'yes'                # Protects the redis instance from unauthenticated requests from other hosts
+    port: 6379                           # port to listen to, 0 disables TCP
+    tcp-backlog: 511                     # TCP listen() backlog
+    unixsocket: /tmp/redis.sock          # listening UNIX socket
+    unixsocketperm: 700                  # Permissions of listening UNIX socket
+    timeout: 0                           # Close the connection after timeout seconds (0 to disable)
+    tcp-keepalive: 300                   # If non-zero, uses SO_KEEPALIVE to send TCP ACKs to clients in absence of communication
+
+# General
+
+    daemonize: 'yes'                     # Run as a daemon (SMF assumes this)
+    supervised: 'no'                     # Controls Redis interactions with the supervisor (Redis doesn't talk to SMF)
+    pidfile: /var/db/redis/redis.pid     # Specify the pid file name
+    loglevel: notice                     # Specify the server verbosity level ( warning | notice | verbose | debug )
+    logfile: /var/log/redis/redis.log    # Specify the log file name
+#   syslog-enabled: 'yes'                # Enable logging to the system logger
+#   syslog-ident: redis                  # Specify the syslog identity
+#   syslog-facility: local0              # Specify the syslog facility
+    databases: 16                        # Set the number of databases
+    always-show-logo: 'no'               # We're boring, we don't need logos in our logs
+
+# Snapshotting
+
+    save:                                # <seconds> <changes>: will save the DB if both the given number of seconds and the given number of write operations have occurred
+    - 900 1
+    - 300 10
+    - 60 10000
+    stop-writes-on-bgsave-error: 'yes'   # Ensure that redis doesn't blindly accept writes if it's unable to persist them to the filesystem
+    rdbcompression: 'yes'                # Compress string objects when persisting the database to the filesystem, may be unnecessary with ZFS compression
+    rdbchecksum: 'yes'                   # Appends a CRC64 checksum to the end of the file, may be unnecessary with ZFS checksumming
+    dbfilename: dump.rdb                 # The RDB database filename
+    dir: /var/db/redis                   # Directory where RDB and AOF data will be stored
+
+# Replication
+
+#   replicaof: <masterip> <masterport>   # Master server to replicate from
+#   masterauth: <master-password>        # Must match the "requirepass" configuration option on the master server
+    replica-serve-stale-data: 'yes'      # Will allow replica to serve data while resynchronization is in progress with master
+    replica-read-only: 'yes'             # If clients are allowed to write data to the replica.  This data will be overwritten after resync with the master
+    repl-diskless-sync: 'no'             # Determines the replication strategy on the master.  diskless sync uses a socket and is quicker, but doesn't scale as well and is also experimental
+    repl-diskless-sync-delay: 5          # Delay the master waits in order to spawn the child that transfers the RDB via socket to the replicas
+#   repl-ping-replica-period: 10         # Interval between pings sent from the replicas to the master
+#   repl-timeout: 60                     # Replication timeout for bulk transfers during sync, master timeout from the replica's PoV, replica timeout from the PoV of the master
+    repl-disable-tcp-nodelay: 'no'       # Disable TCP_NODELAY
+#   repl-backlog-size: 1mb               # Sets the replication backlog size
+#   repl-backlog-ttl: 3600               # Number of seconds that the backlog buffer will be freed after the last replica disconnects
+    replica-priority: 100                # Used by Redis Sentinel to select a replica to promote to master if master is no longer available, lower is better for promotion, 0 disables promotion
+#   min-replicas-to-write: 3             # Determines the minimum number of connected replicas for a master to accept a write from a client
+#   min-replicas-max-lag: 10             # Determines the maximum number of seconds to wait for replication to a replica to complete
+#   replica-announce-ip: 5.5.5.5         # Overrides the master announced replica IP address
+#   replica-announce-port: 1234          # Overrides the master announced replica port
+
+# Security
+
+#   requirepass: <password>              # Requires clients to issue AUTH <password> before processing any other commands
+#   rename-command:                      # Renames commands to prevent dangerous commands from being available in a shared environment
+#   - <old name> <new name>              # Disable a command by renaming it to an empty string
+
+# Clients
+
+#   maxclients: 10000                    # Set the maximum number of simultaneously connected clients
+
+# Memory Management
+
+#   maxmemory: <bytes>                   # Set a memory usage limit in bytes
+#   maxmemory-policy: noeviction         # How redis will resolve reaching maxmemory (volatile-lru|allkeys-lru|volatile-lfu|allkeys-lfu|volatile-random|allkeys-random|volatile-ttl|noeviction)
+#   maxmemory-samples: 5                 # Number of key samples redis will check to perform its evictions
+#   replica-ignore-maxmemory: 'yes'      # Max memory settings will be ignored by replicas, but apply if they're promoted to master
+
+# Lazy Freeing
+
+    lazyfree-lazy-eviction: 'no'         # Use non-blocking deletion to evict data due to maxmemory being met
+    lazyfree-lazy-expire: 'no'           # Use non-blocking deletion to expire data that has exceeded its TTL
+    lazyfree-lazy-server-del: 'no'       # Use non-blocking deletion to delete key overwrites (such as key renames overwriting another key)
+    replica-lazy-flush: 'no'             # Use non-blocking deletion to delete data that has been flushed due to master resynchronization
+
+# Append Only Mode
+
+    appendonly: 'no'                     # Write out an Append Only File (AOF) to the disk.  This acts much like the WAL or ZIL of other databases and filesystems
+    appendfilename: "appendonly.aof"     # The AOF database filename
+#   appendfsync: always                  # Fsync after every write to the append only log.  Good idea if you have a fast SLOG on your ZFS pool
+#   appendfsync: everysec                # Fsync once per second.  Sane compromise for most situations
+    appendfsync: 'no'                    # Disable fsync calls.  Reasonable approach for ZFS which should commit a transaction group every 5 seconds
+    no-appendfsync-on-rewrite: 'no'      # If you have latency problems with appendfsync set to always or everysec, turn this on
+    auto-aof-rewrite-percentage: 100     # Triggers an AOF automatic rewrite (by file size as a percentage)
+    auto-aof-rewrite-min-size: 64mb      # Triggers an AOF automatic rewrite (by absolute file size)
+    aof-load-truncated: 'yes'            # Allows redis to start and recover an obviously truncated AOF file (corruption in the middle of the file will still result in a startup error)
+    aof-use-rdb-preamble: 'yes'          # Load the most recent RDB file, and then recover the remainder of the data from the AOF file
+
+# Lua Scripting
+
+    lua-time-limit: 5000                 # Maximum execution time of a Lua script in milliseconds
+
+# Redis Cluster
+
+#   cluster-enabled: 'yes'               # Start this redis instance as a cluster member
+#   cluster-config-file: nodes-6379.conf # Unique machine edited cluster configuration file
+#   cluster-node-timeout: 15000          # Timeout in milliseconds a node must be unreachable for it to be considered in the failure state
+#   cluster-replica-validity-factor: 10  # Cluster replicas will disqualify their data for use to regenerate the master if it hasn't interacted with the previous master for this value * the cluster-node-timeout
+#   cluster-migration-barrier: 1         # Minimum number of replicas to leave on a previous master if a replica is going to migrate to an orphaned master (a master with no replicas)
+#   cluster-require-full-coverage: 'yes' # Will cause the cluster to stop accepting queries if it detects at least one unserved hash-slot.  Set to 'no' if you want the cluster to continue regardless
+#   cluster-replica-no-failover: 'yes'   # Will prevent replicas from trying to failover its master during master failures.  Master can still manually failover to this replica
+
+# Cluster Docker/NAT Support
+
+#   cluster-announce-ip: 10.1.1.5        # IP address that this node will announce to the rest of the cluster
+#   cluster-announce-port: 6379          # Client port that this node will announce to the rest of the cluster
+#   cluster-announce-bus-port: 6380      # Cluster message bus port that this node will announce to the rest of the cluster
+
+# Slow Log
+
+    slowlog-log-slower-than: 10000       # Logs queries that exceed this number of microseconds
+    slowlog-max-len: 128                 # Limit the slow query log to this number of entries.  Old ones will be removed from the end
+
+# Latency Monitor
+
+    latency-monitor-threshold: 0         # Set the minimum trigger latency of operations for the latency monitor, accessible through the LATENCY command
+
+# Event Notification
+
+    notify-keyspace-events: '""'         # Sets the key space notifications Redis will push to interested parties via Pub/Sub.  Read more at http://redis.io/topics/notifications
+
+# Advanced Configuration
+
+    # If you're editing these, you should already know what they do.
+    hash-max-ziplist-entries: 512
+    hash-max-ziplist-value: 64
+    list-max-ziplist-size: -2
+    list-compress-depth: 0
+    set-max-intset-entries: 512
+    zset-max-ziplist-entries: 128
+    zset-max-ziplist-value: 64
+    hll-sparse-max-bytes: 3000
+    stream-node-max-bytes: 4096
+    stream-node-max-entries: 100
+    activerehashing: 'yes'
+    client-output-buffer-limit:
+    - normal 0 0 0
+    - replica 256mb 64mb 60
+    - pubsub 32mb 8mb 60
+    hz: 10
+    dynamic-hz: 'yes'
+    aof-rewrite-incremental-fsync: 'yes'
+    rdb-save-incremental-fsync: 'yes'

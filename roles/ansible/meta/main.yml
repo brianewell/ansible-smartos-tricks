@@ -2,6 +2,3 @@
 dependencies:
 - role: redis
   vars:
-    redis:
-      config:
-        databases: 1

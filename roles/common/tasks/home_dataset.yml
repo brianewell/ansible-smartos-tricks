@@ -1,0 +1,51 @@
+---
+- name: determine if a dataset exists at /home
+  ignore_errors: true
+  register: delegate_home_dataset
+  zfs_facts:
+    name: "zones/{{ system_uuid }}/data/home"
+    type: filesystem
+
+- name: move existing /home to /home_tmp
+  when: delegate_home_dataset is failed
+  command: "mv -n /home /home_tmp"
+  ignore_errors: true
+
+- name: ensure that the delegated home ZFS dataset exists
+  zfs:
+    name: "zones/{{ system_uuid }}/data/home"
+    state: present
+    extra_zfs_properties:
+      mountpoint: /home
+
+- name: determine home directorys to re-create in /home
+  register: home_tmp
+  find:
+    paths: /home_tmp
+    file_type: directory
+
+- name: ensure that delegated home ZFS datasets exist for each temporary home directory
+  with_items: "{{ home_tmp.files }}"
+  zfs:
+    name: "zones/{{ system_uuid }}/data/home/{{ item.path | basename }}"
+    state: present
+
+- name: ensure that delegated home ZFS datasets have the proper permissions
+  with_items: "{{ home_tmp.files }}"
+  file:
+    path: "/home/{{ item.path | basename }}"
+    mode: "{{ item.mode }}"
+    state: directory
+    owner: "{{ item.uid }}"
+    group: "{{ item.gid }}"
+
+- name: return contents of temporary home directories
+  ignore_errors: true
+  with_items: "{{ home_tmp.files }}"
+  shell:
+    cmd: "mv {{ item.path }}/* {{ item.path }}/.??* /home/{{ item.path | basename }}"
+
+- name: ensure temporary home directory is absent
+  file:
+    path: "/home_tmp"
+    state: absent

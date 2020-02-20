@@ -1,5 +1,6 @@
 ---
-ansible_python_interpreter: /opt/local/bin/python
+ansible_python_interpreter: /opt/local/bin/python3
+home_dataset: false
 
 inputrc:
   config: {}
@@ -44,5 +45,3 @@ sshd:
     X11Forwarding: 'yes'
     X11UseLocalhost: 'yes'
     XAuthLocation: '/opt/local/bin/xauth'
-
-zfs_home: false

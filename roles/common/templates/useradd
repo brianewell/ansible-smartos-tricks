@@ -1,6 +1,6 @@
 {{ configuration_header }}
 
 EXCEED_TRAD=silent
-{% if delegate_dataset is succeeded %}
+{% if home_dataset and delegate_dataset is succeeded %}
 MANAGE_ZFS=yes
 {% endif %}

@@ -9,10 +9,12 @@ The common role performs the configuration and decrufting steps for a base Smart
 ### Configuration Variables
 
 * **ansible_python_intrepreter**: String that can override the SmartOS default of `/opt/local/bin/python`
+* **home_dataset**: Boolean that determines if a home dataset should be configured if delegated_dataset is configured in the zone manifest.
 * **inputrc.config**: Dictionary that can be merged with existing inputrc configuration parameters
 * **inputrc.bindings**: Dictionary that can be merged with existing inputrc key-bindings
 * **sshd.key_types**: List that can override the default of dsa, ecdsa, ed25519 and rsa
-* **sshd.config**: Dictionary that can be merged with existing sshd configuration parameters
+* **sshd.config**: Dictionary of sshd configuration parameters can be merged with default sshd configuration parameters
+* **sshd.match**: Dictionary of sshd match strings (as keys) and dictionaries (as values) of configuration parameters to use in sshd configuration.
 
 ## Ansible Role
 

@@ -1,4 +1,17 @@
 ---
+- name: fail when not SmartOS
+  when: ansible_distribution != "SmartOS"
+  fail:
+    msg: This role is intended to only be used on SmartOS distributions
+
+- name: determine the system uuid
+  command: sysinfo
+  register: sysinfo_command
+
+- name: set fact of system uuid
+  set_fact:
+    system_uuid: "{{ (sysinfo_command.stdout | from_json).UUID }}"
+
 - name: ensure that unnecessary default services are disabled
   service:
     name: 'svc:/network/inetd:default svc:/system/sac:default'
@@ -9,10 +22,14 @@
   notify: remove delegated mountpoint
   register: delegate_dataset
   zfs:
-    name: '{{ ansible_mounts.0.device }}/data'
+    name: 'zones/{{ system_uuid }}/data'
     state: present
     extra_zfs_properties:
       mountpoint: none
+
+- name: ensure that the home ZFS dataset exists
+  when: home_dataset and delegate_dataset is succeeded
+  include_tasks: home_dataset.yml
 
 - name: ensure that useradd is properly configured
   template:

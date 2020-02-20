@@ -25,7 +25,7 @@
 - name: ensure presence of neo4j ZFS filesystem at {{ neo4j.data_path }}
   when: delegate_dataset is succeeded
   zfs:
-    name: zones/{{ zone_uuid }}/data/neo4j
+    name: '{{ zone_dataset }}/neo4j'
     state: present
     extra_zfs_properties:
       mountpoint: '{{ neo4j.data_path }}'

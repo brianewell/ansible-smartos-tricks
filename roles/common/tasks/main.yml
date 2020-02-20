@@ -8,9 +8,9 @@
   command: sysinfo
   register: sysinfo_command
 
-- name: set the zone uuid fact
+- name: set the zone dataset fact
   set_fact:
-    zone_uuid: '{{ (sysinfo_command.stdout | from_json).UUID }}'
+    zone_dataset: 'zones/{{ (sysinfo_command.stdout | from_json).UUID }}/data'
 
 - name: ensure that unnecessary default services are disabled
   service:
@@ -22,7 +22,7 @@
   notify: remove delegated mountpoint
   register: delegate_dataset
   zfs:
-    name: 'zones/{{ zone_uuid }}/data'
+    name: '{{ zone_dataset }}'
     state: present
     extra_zfs_properties:
       mountpoint: none

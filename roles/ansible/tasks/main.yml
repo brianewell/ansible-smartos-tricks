@@ -2,23 +2,24 @@
 - name: ensure that pkgin managed software has been installed
   pkgin:
     name:
+    - git
     - libyaml
-    - py27-bcrypt
-    - py27-cryptography
-    - py27-nacl
-    - py27-pip
+    - py37-bcrypt
+    - py37-cryptography
+    - py37-nacl
+    - py37-pip
 
 - name: ensure that pip has been updated to its latest version
   pip:
     name: pip
     state: latest
+    executable: pip # Ansible is confused by SmartOS' pkgin managed pip and needs help here
 
 - name: ensure that ansible has been updated to its latest version
   pip:
     name:
     - ansible
     - netaddr
-    - pywinrm>=0.3.0
     - redis
     state: latest
 
@@ -37,3 +38,10 @@
     owner: root
     group: root
     mode: 0644
+
+- name: ensure that an OpenSSH ed25519 keypair exists for root
+  openssh_keypair:
+    path: /root/.ssh/id_ed25519
+    type: ed25519
+    owner: root
+    group: root

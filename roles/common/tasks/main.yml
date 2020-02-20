@@ -1,6 +1,6 @@
 ---
 - name: fail when not SmartOS
-  when: ansible_distribution != "SmartOS"
+  when: ansible_distribution != 'SmartOS'
   fail:
     msg: This role is intended to only be used on SmartOS distributions
 
@@ -10,7 +10,7 @@
 
 - name: set the zone uuid fact
   set_fact:
-    zone_uuid: "{{ (sysinfo_command.stdout | from_json).UUID }}"
+    zone_uuid: '{{ (sysinfo_command.stdout | from_json).UUID }}'
 
 - name: ensure that unnecessary default services are disabled
   service:

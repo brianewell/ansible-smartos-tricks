@@ -8,3 +8,4 @@ neo4j:
   data_path: /var/db/neo4j
   recordsize: 16k
   version: '4.0.0'
+  openjdk: 11

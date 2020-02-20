@@ -17,7 +17,7 @@
 		<method_context project='{{ neo4j.project }}' working_directory='{{ neo4j.data_path }}'>
 			<method_credential user='{{ neo4j.user }}' group='{{ neo4j.group }}'/>
 			<method_environment>
-				<envvar name='JAVA_HOME' value='/opt/local/java/openjdk8'/>
+				<envvar name='JAVA_HOME' value='/opt/local/java/openjdk{{ neo4j.openjdk }}'/>
 				<envvar name='PATH' value='/opt/local/sbin:/opt/local/bin:/usr/sbin:/usr/bin'/>
 			</method_environment>
 		</method_context>

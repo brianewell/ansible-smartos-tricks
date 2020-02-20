@@ -1,7 +1,7 @@
 ---
-- name: ensure that OpenJDK8 is present
+- name: ensure that OpenJDK{{ neo4j.openjdk }} is present
   pkgin:
-    name: openjdk8
+    name: openjdk{{ neo4j.openjdk }}
 
 - name: ensure presence of {{ neo4j.group }} group
   group:
@@ -25,7 +25,7 @@
 - name: ensure presence of neo4j ZFS filesystem at {{ neo4j.data_path }}
   when: delegate_dataset is succeeded
   zfs:
-    name: '{{ ansible_mounts.0.device }}/data/neo4j'
+    name: zones/{{ zone_uuid }}/data/neo4j
     state: present
     extra_zfs_properties:
       mountpoint: '{{ neo4j.data_path }}'

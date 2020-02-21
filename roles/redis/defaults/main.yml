@@ -1,9 +1,9 @@
 ---
 redis:
   config:
-
+#---------
 # Network
-
+# --------
     bind: '::1 127.0.0.1'                # The address or addresses to bind to (IPv4|IPv6)
     protected-mode: 'yes'                # Protects the redis instance from unauthenticated requests from other hosts
     port: 6379                           # port to listen to, 0 disables TCP
@@ -13,8 +13,9 @@ redis:
     timeout: 0                           # Close the connection after timeout seconds (0 to disable)
     tcp-keepalive: 300                   # If non-zero, uses SO_KEEPALIVE to send TCP ACKs to clients in absence of communication
 
+#---------
 # General
-
+#---------
     daemonize: 'yes'                     # Run as a daemon (SMF assumes this)
     supervised: 'no'                     # Controls Redis interactions with the supervisor (Redis doesn't talk to SMF)
     pidfile: /var/db/redis/redis.pid     # Specify the pid file name
@@ -26,8 +27,9 @@ redis:
     databases: 16                        # Set the number of databases
     always-show-logo: 'no'               # We're boring, we don't need logos in our logs
 
+#--------------
 # Snapshotting
-
+#--------------
     save:                                # <seconds> <changes>: will save the DB if both the given number of seconds and the given number of write operations have occurred
     - 900 1
     - 300 10
@@ -38,8 +40,9 @@ redis:
     dbfilename: dump.rdb                 # The RDB database filename
     dir: /var/db/redis                   # Directory where RDB and AOF data will be stored
 
+#-------------
 # Replication
-
+#-------------
 #   replicaof: <masterip> <masterport>   # Master server to replicate from
 #   masterauth: <master-password>        # Must match the "requirepass" configuration option on the master server
     replica-serve-stale-data: 'yes'      # Will allow replica to serve data while resynchronization is in progress with master
@@ -56,33 +59,38 @@ redis:
 #   min-replicas-max-lag: 10             # Determines the maximum number of seconds to wait for replication to a replica to complete
 #   replica-announce-ip: 5.5.5.5         # Overrides the master announced replica IP address
 #   replica-announce-port: 1234          # Overrides the master announced replica port
-
+#
+#----------
 # Security
-
+#----------
 #   requirepass: <password>              # Requires clients to issue AUTH <password> before processing any other commands
 #   rename-command:                      # Renames commands to prevent dangerous commands from being available in a shared environment
 #   - <old name> <new name>              # Disable a command by renaming it to an empty string
-
+#
+#---------
 # Clients
-
+#---------
 #   maxclients: 10000                    # Set the maximum number of simultaneously connected clients
-
+#
+#-------------------
 # Memory Management
-
+#-------------------
 #   maxmemory: <bytes>                   # Set a memory usage limit in bytes
 #   maxmemory-policy: noeviction         # How redis will resolve reaching maxmemory (volatile-lru|allkeys-lru|volatile-lfu|allkeys-lfu|volatile-random|allkeys-random|volatile-ttl|noeviction)
 #   maxmemory-samples: 5                 # Number of key samples redis will check to perform its evictions
 #   replica-ignore-maxmemory: 'yes'      # Max memory settings will be ignored by replicas, but apply if they're promoted to master
-
+#
+#--------------
 # Lazy Freeing
-
+#--------------
     lazyfree-lazy-eviction: 'no'         # Use non-blocking deletion to evict data due to maxmemory being met
     lazyfree-lazy-expire: 'no'           # Use non-blocking deletion to expire data that has exceeded its TTL
     lazyfree-lazy-server-del: 'no'       # Use non-blocking deletion to delete key overwrites (such as key renames overwriting another key)
     replica-lazy-flush: 'no'             # Use non-blocking deletion to delete data that has been flushed due to master resynchronization
 
+#------------------
 # Append Only Mode
-
+#------------------
     appendonly: 'no'                     # Write out an Append Only File (AOF) to the disk.  This acts much like the WAL or ZIL of other databases and filesystems
     appendfilename: "appendonly.aof"     # The AOF database filename
 #   appendfsync: always                  # Fsync after every write to the append only log.  Good idea if you have a fast SLOG on your ZFS pool
@@ -94,12 +102,14 @@ redis:
     aof-load-truncated: 'yes'            # Allows redis to start and recover an obviously truncated AOF file (corruption in the middle of the file will still result in a startup error)
     aof-use-rdb-preamble: 'yes'          # Load the most recent RDB file, and then recover the remainder of the data from the AOF file
 
+#---------------
 # Lua Scripting
-
+#---------------
     lua-time-limit: 5000                 # Maximum execution time of a Lua script in milliseconds
 
+#---------------
 # Redis Cluster
-
+#---------------
 #   cluster-enabled: 'yes'               # Start this redis instance as a cluster member
 #   cluster-config-file: nodes-6379.conf # Unique machine edited cluster configuration file
 #   cluster-node-timeout: 15000          # Timeout in milliseconds a node must be unreachable for it to be considered in the failure state
@@ -107,28 +117,33 @@ redis:
 #   cluster-migration-barrier: 1         # Minimum number of replicas to leave on a previous master if a replica is going to migrate to an orphaned master (a master with no replicas)
 #   cluster-require-full-coverage: 'yes' # Will cause the cluster to stop accepting queries if it detects at least one unserved hash-slot.  Set to 'no' if you want the cluster to continue regardless
 #   cluster-replica-no-failover: 'yes'   # Will prevent replicas from trying to failover its master during master failures.  Master can still manually failover to this replica
-
+#
+#----------------------------
 # Cluster Docker/NAT Support
-
+#----------------------------
 #   cluster-announce-ip: 10.1.1.5        # IP address that this node will announce to the rest of the cluster
 #   cluster-announce-port: 6379          # Client port that this node will announce to the rest of the cluster
 #   cluster-announce-bus-port: 6380      # Cluster message bus port that this node will announce to the rest of the cluster
-
+#
+#----------
 # Slow Log
-
+#----------
     slowlog-log-slower-than: 10000       # Logs queries that exceed this number of microseconds
     slowlog-max-len: 128                 # Limit the slow query log to this number of entries.  Old ones will be removed from the end
 
+#-----------------
 # Latency Monitor
-
+#-----------------
     latency-monitor-threshold: 0         # Set the minimum trigger latency of operations for the latency monitor, accessible through the LATENCY command
 
+#--------------------
 # Event Notification
-
+#--------------------
     notify-keyspace-events: '""'         # Sets the key space notifications Redis will push to interested parties via Pub/Sub.  Read more at http://redis.io/topics/notifications
 
+#------------------------
 # Advanced Configuration
-
+#------------------------
     # If you're editing these, you should already know what they do.
     hash-max-ziplist-entries: 512
     hash-max-ziplist-value: 64

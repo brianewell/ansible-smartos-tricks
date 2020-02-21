@@ -1,4 +1,12 @@
 ---
+- name: ensure presence of redis ZFS dataset
+  when: delegate_dataset is succeeded
+  zfs:
+    name: '{{ zone_dataset }}/redis'
+    state: present
+    extra_zfs_properties:
+      mountpoint: '{{ redis.config.dir }}'
+
 - name: ensure that redis has been installed
   pkgin:
     name: redis

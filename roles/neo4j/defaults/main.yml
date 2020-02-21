@@ -9,3 +9,106 @@ neo4j:
   recordsize: 16k
   version: '4.0.0'
   openjdk: 11
+  config:
+#-----------------------
+# General Configuration
+#-----------------------
+#     dbms.default_database: neo4j
+#     dbms.directories.data: data
+#     dbms.directories.plugins: plugins
+#     dbms.directories.certificates: certificates
+#     dbms.directories.logs: logs
+#     dbms.directories.lib: lib
+#     dbms.directories.run: run
+    dbms.directories.import: import
+#     dbms.security.auth_enabled: false
+#     dbms.allow_upgrade: true
+#     dbms.memory.heap.initial_size: 512m
+#     dbms.memory.heap.max_size: 512m
+#     dbms.memory.pagecache.size: 10g
+#
+#---------------------------------
+# Network Connector Configuration
+#---------------------------------
+    dbms.connectors.default_listen_address: '0.0.0.0'
+#     dbms.connectors.default_advertised_address: localhost
+    dbms.connector.bolt.enabled: true
+#     dbms.connector.bolt.tls_level: DISABLED
+#     dbms.connector.bolt.listen_address: :7687
+    dbms.connector.http.enabled: true
+#     dbms.connector.http.listen_address: :7474
+    dbms.connector.https.enabled: false
+#     dbms.connector.https.listen_address: :7473
+#     dbms.threads.worker_count:
+#
+#--------------------------
+# SSL Policy Configuration
+#--------------------------
+#     dbms.ssl.policy.bolt.enabled: true
+#     dbms.ssl.policy.bolt.base_directory: certificates/bolt
+#     dbms.ssl.policy.bolt.private_key: private.key
+#     dbms.ssl.policy.bolt.public_certificate: public.crt
+#     dbms.ssl.policy.https.enabled: true
+#     dbms.ssl.policy.https.base_directory: certificates/https
+#     dbms.ssl.policy.https.private_key: private.key
+#     dbms.ssl.policy.https.public_certificate: public.crt
+#     dbms.ssl.policy.cluster.enabled: true
+#     dbms.ssl.policy.cluster.base_directory: certificates/cluster
+#     dbms.ssl.policy.cluster.private_key: private.key
+#     dbms.ssl.policy.cluster.public_certificate: public.crt
+#     dbms.ssl.policy.backup.enabled: true
+#     dbms.ssl.policy.backup.base_directory: certificates/backup
+#     dbms.ssl.policy.backup.private_key: private.key
+#     dbms.ssl.policy.backup.public_certificate: public.crt
+#
+#-----------------------
+# Logging Configuration
+#-----------------------
+#     dbms.logs.http.enabled: true
+#     dbms.logs.http.rotation.keep_number: 5
+#     dbms.logs.http.rotation.size: 20m
+#     dbms.logs.gc.enabled: true
+#     dbms.logs.gc.options: -Xlog:gc*,safepoint,age*=trace
+#     dbms.logs.gc.rotation.keep_number: 5
+#     dbms.logs.gc.rotation.size: 20m
+#     dbms.logs.debug.level: INFO
+#     dbms.logs.debug.rotation.size: 20m
+#     dbms.logs.debug.rotation.keep_number: 7
+#     dbms.logs.query.threshold: 2s
+#
+#-----------------------------
+# Miscellaneous Configuration
+#-----------------------------
+#     cypher.default_language_version: 3.5
+#     dbms.security.allow_csv_import_from_file_urls: true
+#     dbms.security.http_access_control_allow_origin: *
+#     dbms.security.http_strict_transport_security:
+    dbms.tx_log.rotation.retention_policy: 1 days
+#     dbms.read_only: false
+#     dbms.unmanaged_extension_classes: org.neo4j.examples.server.unmanaged=/examples/unmanaged
+#     dbms.security.procedures.unrestricted: my.extensions.example,my.procedures.*
+#     dbms.security.procedures.whitelist: apoc.coll.*,apoc.load.*
+#
+#----------------
+# JVM Parameters
+#----------------
+    dbms.jvm.additional:
+    - -XX:+UseG1GC
+    - -XX:-OmitStackTraceInFastThrow
+    - -XX:+AlwaysPreTouch
+    - -XX:+UnlockExperimentalVMOptions
+    - -XX:+TrustFinalNonStaticFields
+    - -XX:+DisableExplicitGC
+    - -Djdk.nio.maxCachedBufferSize=262144
+    - -Dio.netty.tryReflectionSetAccessible=true
+#     - -XX:+ExitOnOutOfMemoryError
+#     - -Dcom.sun.management.jmxremote.port=3637
+#     - -Dcom.sun.management.jmxremote.authenticate=true
+#     - -Dcom.sun.management.jmxremote.ssl=false
+#     - -Dcom.sun.management.jmxremote.password.file=/absolute/path/to/conf/jmx.password
+#     - -Dcom.sun.management.jmxremote.access.file=/absolute/path/to/conf/jmx.access
+#     - -Djava.rmi.server.hostname=$THE_NEO4J_SERVER_HOSTNAME
+    - -Djdk.tls.ephemeralDHKeySize=2048
+    - -Djdk.tls.rejectClientInitiatedRenegotiation=true
+#     - -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+#     - -Djdk.serialFilter=java.**;org.neo4j.**;com.neo4j.**;com.hazelcast.**;net.sf.ehcache.Element;com.sun.proxy.*;org.openjdk.jmh.**;!*

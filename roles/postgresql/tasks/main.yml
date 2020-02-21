@@ -2,7 +2,7 @@
 - name: ensure presence of postgresql ZFS dataset
   when: delegate_dataset is succeeded
   zfs:
-    name: '{{ ansible_mounts.0.device }}/data/pgsql'
+    name: '{{ zone_dataset }}/pgsql'
     state: present
     extra_zfs_properties:
       mountpoint: /var/pgsql
@@ -17,11 +17,12 @@
     mode: 0700
 
 - name: ensure presence of {{ postgresql.server }}
+  notify: restart postgresql-server
   pkgin:
     name: '{{ postgresql.server }}'
-  notify: restart postgresql-server
 
 - name: ensure that postgresql-server is properly configured
+  notify: restart postgresql-server
   template:
     src: '{{ item }}'
     dest: '/var/pgsql/data/{{ item }}'
@@ -32,7 +33,6 @@
     - postgresql.conf
     - pg_hba.conf
     - pg_ident.conf
-  notify: restart postgresql-server
 
 - name: ensure that postgresql-server is enabled
   register: postgresql_enabled

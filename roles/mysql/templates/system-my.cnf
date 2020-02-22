@@ -1,0 +1,16 @@
+{{ configuration_header }}
+
+# Complete documentation is available at the following URL:
+# https://mariadb.com/kb/en/configuring-mariadb-with-option-files/
+
+{% for key,options in mysql.config|dictsort %}
+[{{ key }}]
+{% for option_key,option_value in options|dictsort %}
+{% if option_value is none %}
+{{ option_key }}
+{% else %}
+{{ option_key }} = {{ option_value }}
+{% endif %}
+{% endfor %}
+
+{% endfor %}

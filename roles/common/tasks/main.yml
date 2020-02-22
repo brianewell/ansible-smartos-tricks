@@ -56,6 +56,14 @@
     group: root
     mode: 0644
 
+- name: ensure that the root home directory is secured
+  file:
+    path: /root
+    state: directory
+    owner: root
+    group: root
+    mode: 0750
+
 - name: ensure that the pkgsrc cache has been updated
   pkgin:
     update_cache: true

@@ -1,12 +1,13 @@
 ---
 minecraft:
   server:  mojang
-  version: 1.14.4
+  version: 1.15.2
   path:    /var/games/minecraft
   eula:    true
   user:    minecraft
   group:   minecraft
   project: minecraft
+  openjdk: 8
   quota:   none
   parameters:
   - Xms2G

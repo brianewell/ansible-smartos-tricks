@@ -1,6 +1,6 @@
 ---
 - name: ensure that server-{{ minecraft.server }}-{{ minecraft.version }}.jar has been downloaded
   get_url:
-    url: 'https://launcher.mojang.com/v1/objects/{{ mojang_checksum[minecraft.version].split(":")[1] }}/server.jar'
+    url: 'https://launcher.mojang.com/v1/objects/{{ mojang_checksum[minecraft.version|string].split(":")[1] }}/server.jar'
     dest: '{{ minecraft.path }}/server-{{ minecraft.server }}-{{ minecraft.version }}.jar'
-    checksum: '{{ mojang_checksum[minecraft.version] }}'
+    checksum: '{{ mojang_checksum[minecraft.version|string] }}'

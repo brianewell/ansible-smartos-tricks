@@ -1,7 +1,7 @@
 ---
-- name: ensure that OpenJDK8 is present
+- name: ensure that OpenJDK{{ minecraft.openjdk }} is present
   pkgin:
-    name: openjdk8
+    name: openjdk{{ minecraft.openjdk }}
 
 - name: ensure that authorization description exists for Minecraft Service State Management
   lineinfile:
@@ -37,7 +37,7 @@
 - name: ensure presence of Minecraft ZFS dataset at {{ minecraft.path }}
   when: delegate_dataset is succeeded
   zfs:
-    name: '{{ ansible_mounts.0.device }}/data/minecraft'
+    name: '{{ zone_dataset }}/minecraft'
     state: present
     extra_zfs_properties:
       mountpoint: '{{ minecraft.path }}'
@@ -49,7 +49,7 @@
     state: directory
     owner: '{{ minecraft.user }}'
     group: '{{ minecraft.group }}'
-    mode: 0755
+    mode: 0750
 
 # Download and symlink the specified minecraft server
 

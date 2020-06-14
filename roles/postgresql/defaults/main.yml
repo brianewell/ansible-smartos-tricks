@@ -1,6 +1,6 @@
 ---
 postgresql:
-  server: postgresql11-server
+  server: postgresql12-server
   recordsize: 16k
   config:
 #----------------

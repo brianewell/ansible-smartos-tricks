@@ -13,7 +13,7 @@
 - name: ensure the existence of ghost ZFS dataset at {{ ghost.path }}
   when: delegate_dataset is succeeded
   zfs:
-    name: '{{ ansible_mounts.0.device }}/data/{{ ghost.dataset }}'
+    name: '{{ zone_dataset }}/{{ ghost.dataset }}'
     state: present
     extra_zfs_properties:
       mountpoint: '{{ ghost.path }}'

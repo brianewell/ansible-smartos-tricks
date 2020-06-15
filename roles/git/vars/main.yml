@@ -1,0 +1,7 @@
+---
+home_dataset: true
+sshd:
+  match:
+    'Group other':
+      DisableForwarding: 'yes'
+      PermitTTY: 'no'

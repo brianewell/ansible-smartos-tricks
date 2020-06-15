@@ -1,0 +1,8 @@
+---
+- name: ensure that git has been installed
+  pkgin:
+    name: git
+- name: ensure that git-shell is a valid shell
+  lineinfile:
+    path: /etc/shells
+    line: /opt/local/bin/git-shell

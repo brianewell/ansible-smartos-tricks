@@ -47,6 +47,7 @@
     url: 'https://neo4j.com/artifact.php?name=neo4j-community-{{ neo4j.version }}-unix.tar.gz'
     dest: '/tmp/neo4j-community-{{ neo4j.version }}-unix.tar.gz'
     checksum: '{{ neo4j_checksum[neo4j.version] }}'
+    timeout: 30
 
 - name: ensure that Neo4j {{ neo4j.version }} has been installed
   unarchive:

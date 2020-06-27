@@ -38,7 +38,7 @@
     owner: root
     group: root
     mode: 0755
-  with_items:
+  loop:
   - '{{ neo4j.path }}'
   - '{{ neo4j.conf_path }}'
 
@@ -64,7 +64,7 @@
   file:
     path: '{{ neo4j.path }}/{{ item }}'
     state: absent
-  with_items:
+  loop:
   - LICENSE.txt
   - LICENSES.txt
   - NOTICE.txt
@@ -79,7 +79,7 @@
     path:  '{{ item.path }}'
     state: link
     force: true
-  with_items:
+  loop:
   - src:  '{{ neo4j.conf_path }}'
     path: '{{ neo4j.path }}/conf'
   - src:  '{{ neo4j.data_path }}'
@@ -92,7 +92,7 @@
     owner: '{{ neo4j.user }}'
     group: '{{ neo4j.group }}'
     mode: 0700
-  with_items:
+  loop:
   - '{{ neo4j.data_path }}'
   - '{{ neo4j.path }}/certificates'
   - '{{ neo4j.path }}/logs'

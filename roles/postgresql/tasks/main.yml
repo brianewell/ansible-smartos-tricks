@@ -23,16 +23,16 @@
 
 - name: ensure that postgresql-server is properly configured
   notify: restart postgresql-server
+  loop:
+    - postgresql.conf
+    - pg_hba.conf
+    - pg_ident.conf
   template:
     src: '{{ item }}'
     dest: '/var/pgsql/data/{{ item }}'
     owner: postgres
     group: postgres
     mode: 0600
-  with_items:
-    - postgresql.conf
-    - pg_hba.conf
-    - pg_ident.conf
 
 - name: ensure that postgresql-server is enabled
   register: postgresql_enabled

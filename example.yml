@@ -2,28 +2,41 @@
 #
 # The common role performs the common configuration and decrufting steps for a base SmartOS zone
 #
-#- hosts: common
-#  roles:
-#  - common
-#  vars:
-#    ansible_python_interpreter: /opt/local/bin/python # specify a python intrepreter other than the SmartOS default
-#    inputrc:
-#      config: {}   # specify additional inputrc configuration parameters
-#      bindings: {} # specify additional inputrc key-bindings
-#    sshd:
-#      config: {}   # specify additional sshd configuration parameters
-#      key_types: [dsa, ecdsa, ed25519, rsa ] # specify sshd host key types
+# - hosts: common
+#   roles:
+#   - common
+#   vars:
+#     ansible_python_interpreter: /opt/local/bin/python # specify a python intrepreter other than the SmartOS default
+#     inputrc:
+#       config: {}   # specify additional inputrc configuration parameters
+#       bindings: {} # specify additional inputrc key-bindings
+#     sshd:
+#       config: {}   # specify additional sshd configuration parameters
+#       key_types: [dsa, ecdsa, ed25519, rsa ] # specify sshd host key types
 #
 #
 # The ansible role installs and configures a base SmartOS zone to act as an Ansible host to run this, and any other playbooks, templates and modules.
 #
-#- hosts: ansible
-#  roles:
-#  - ansible
-#  vars:
-#    ansible:
-#      config:
-#        default: {} # specify additional default configuration parameters
+# - hosts: ansible
+#   roles:
+#   - ansible
+#   vars:
+#     ansible:
+#       config:
+#         default: {} # specify additional default configuration parameters
+#
+#
+# The git role installsand configures a base SmartOS zone to serve as a get repository
+#
+# - hosts: test
+#   roles:
+#   - git
+#   vars:
+#     git:
+#       users: # specify a set of users to create with git-shell configured
+#       - user1
+#       - user2
+#       - ...
 #
 #
 # The mysql role installs and configures MySQL on a base SmartOS zone

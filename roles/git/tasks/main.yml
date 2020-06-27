@@ -7,10 +7,10 @@
     path: /etc/shells
     line: /opt/local/bin/git-shell
 - name: ensure that git repository users exist
-  loop: "{{ git.users }}"
+  loop: '{{ git.users }}'
   user:
-    name: "{{ item }}"
+    name: '{{ item }}'
     shell: /opt/local/bin/git-shell
 - name: ensure that git repository users can login
-  loop: "{{ git.users }}"
+  loop: '{{ git.users }}'
   command: passwd -N {{ item }}

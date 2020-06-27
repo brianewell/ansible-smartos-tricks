@@ -8,11 +8,13 @@
 #   vars:
 #     ansible_python_interpreter: /opt/local/bin/python # specify a python intrepreter other than the SmartOS default
 #     inputrc:
-#       config: {}   # specify additional inputrc configuration parameters
-#       bindings: {} # specify additional inputrc key-bindings
+#       config: {}      # specify additional inputrc configuration parameters
+#       bindings: {}    # specify additional inputrc key-bindings
 #     sshd:
-#       config: {}   # specify additional sshd configuration parameters
+#       config: {}      # specify additional sshd configuration parameters
 #       key_types: [dsa, ecdsa, ed25519, rsa ] # specify sshd host key types
+#     vim:
+#       colorscheme: '' # specify a custom colorscheme in /root/.vimrc
 #
 #
 # The ansible role installs and configures a base SmartOS zone to act as an Ansible host to run this, and any other playbooks, templates and modules.

@@ -64,6 +64,12 @@
     group: root
     mode: 0750
 
+- name: ensure that vim colorscheme is set
+  when: vim.colorscheme is defined
+  lineinfile:
+    path: /root/.vimrc
+    line: colorscheme {{ vim.colorscheme }}
+
 - name: ensure that the pkgsrc cache has been updated
   pkgin:
     update_cache: true

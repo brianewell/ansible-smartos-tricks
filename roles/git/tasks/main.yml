@@ -2,15 +2,18 @@
 - name: ensure that git has been installed
   pkgin:
     name: git
+
 - name: ensure that git-shell is a valid shell
   lineinfile:
     path: /etc/shells
     line: /opt/local/bin/git-shell
+
 - name: ensure that git repository users exist
   loop: '{{ git.users }}'
   user:
     name: '{{ item }}'
     shell: /opt/local/bin/git-shell
+
 - name: ensure that git repository users can login
   loop: '{{ git.users }}'
   command: passwd -N {{ item }}

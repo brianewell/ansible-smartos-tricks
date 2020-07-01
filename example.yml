@@ -7,6 +7,7 @@
 #   - common
 #   vars:
 #     ansible_python_interpreter: /opt/local/bin/python # specify a python intrepreter other than the SmartOS default
+#     home_dataset: false # specify if a home dataset should be established
 #     inputrc:
 #       config: {}      # specify additional inputrc configuration parameters
 #       bindings: {}    # specify additional inputrc key-bindings

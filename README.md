@@ -2,6 +2,17 @@
 
 This collection of Ansible roles is the companion piece to my blog, [Stupid SmartOS Tricks](https://blog.brianewell.com/).
 
+## Installation
+
+Clone this repository and optionally run `ansible-bootstrap.sh` to have it bootstrap Ansible within your local environment (assuming SmartOS):
+
+```
+# pkgin -y install git
+# git clone https://github.com/brianewell/ansible-smartos-tricks
+# cd ansible-smartos-tricks
+# ./ansible-bootstrap.sh
+```
+
 ## Common Role
 
 The common role performs the configuration and decrufting steps for a base SmartOS zone that I use in all other roles.  It is inherited into those other roles by default, but is also available for direct use.

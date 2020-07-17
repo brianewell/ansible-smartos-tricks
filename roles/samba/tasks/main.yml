@@ -1,0 +1,30 @@
+---
+- name: ensure presence of samba
+  notify: restart samba
+  pkgin:
+    name:
+    - samba
+
+- name: ensure that samba is properly configured
+  notify: restart samba
+  template:
+    src: smb.conf
+    dest: /opt/local/etc/samba/smb.conf
+    mode: 0644
+    owner: root
+    group: root
+
+- name: ensure that the log directory ({{ samba.global["log file"] | dirname }}) exists
+  when: samba.global['log file'] is defined
+  file:
+    path: '{{ samba.global["log file"] | dirname }}'
+    state: directory
+    owner: root
+    group: root
+    mode: 0750
+
+- name: ensure that samba has been enabled
+  register: samba_enabled
+  service:
+    name: 'svc:/pkgsrc/samba:smbd svc:/pkgsrc/samba:nmbd'
+    enabled: true

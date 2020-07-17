@@ -1,0 +1,6 @@
+---
+- name: restart samba
+  when: not samba_enabled.changed
+  service:
+    name: 'svc:/pkgsrc/samba:smbd svc:/pkgsrc/samba:nmbd'
+    state: restarted

@@ -1,0 +1,11 @@
+---
+samba:
+  global:
+    'workgroup': MYGROUP
+    'server string': 'Samba %v (%h)'
+    'security': 'user'
+    'load printers': 'yes'
+  homes:
+    'comment': 'Home Directories'
+    'browseable': 'no'
+    'writable': 'yes'

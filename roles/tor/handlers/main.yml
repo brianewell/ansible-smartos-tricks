@@ -1,0 +1,6 @@
+---
+- name: restart tor
+  when: not tor_enabled.changed
+  service:
+    name: 'svc:/pkgsrc/tor:default'
+    state: restarted

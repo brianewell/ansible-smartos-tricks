@@ -1,0 +1,11 @@
+{{ configuration_header }}
+
+{% for key,value in tor|dictsort %}
+{% if value is iterable and value is not string %}
+{% for v in value %}
+{{ key }} {{ v }}
+{% endfor %}
+{% else %}
+{{ key }} {{ value }}
+{% endif %}
+{% endfor %}

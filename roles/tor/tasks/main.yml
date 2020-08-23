@@ -1,0 +1,26 @@
+---
+- name: ensure presence of tor
+  notify: restart tor
+  pkgin:
+    name:
+    - tor
+    - nyx
+    - py37-curses
+
+- name: ensure that tor is properly configured
+  notify: restart tor
+  template:
+    src: torrc
+    dest: /opt/local/etc/tor/torrc
+    mode: 0644
+    owner: root
+    group: root
+
+- name: ensure that the tor user can bind to ports under 1024
+  command: usermod -K defaultpriv=basic,net_privaddr tor
+
+- name: ensure that tor has been enabled
+  register: tor_enabled
+  service:
+    name: 'svc:/pkgsrc/tor:default'
+    enabled: true

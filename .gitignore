@@ -1,2 +1,5 @@
+!ansible-bootstrap.yml
+!example.yml
 *.retry
+*.yml
 .*.swp

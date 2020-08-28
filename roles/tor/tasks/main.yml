@@ -16,8 +16,14 @@
     owner: root
     group: root
 
-- name: ensure that the tor user can bind to ports under 1024
-  command: usermod -K defaultpriv=basic,net_privaddr tor
+- name: ensure that tor is executed with ASLR
+  command: 'svccfg -s tor setprop method_context/security_flags = astring: aslr'
+
+- name: ensure that tor is allowed to lock memory and bind to ports under 1024 and can't snoop on other processes
+  command: 'svccfg -s tor setprop method_context/privileges = astring: "basic,net_privaddr,!proc_chroot,!proc_info,proc_lock_memory,!proc_session"'
+
+- name: refresh tor:default configuration
+  command: 'svccfg -s tor:default refresh'
 
 - name: ensure that tor has been enabled
   register: tor_enabled

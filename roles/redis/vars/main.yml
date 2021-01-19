@@ -1,5 +1,5 @@
 ---
-redis:
+default_redis:
   config:
 #---------
 # Network

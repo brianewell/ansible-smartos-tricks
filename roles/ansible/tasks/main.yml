@@ -3,23 +3,22 @@
   pkgin:
     name:
     - git
-    - libyaml
-    - py37-bcrypt
-    - py37-cryptography
-    - py37-nacl
-    - py37-pip
+#    - libyaml
+#    - py38-bcrypt
+    - py38-cryptography
+#    - py38-nacl
+    - py38-pip
 
 - name: ensure that pip has been updated to its latest version
   pip:
     name: pip
     state: latest
-    executable: pip # Ansible is confused by SmartOS' pkgin managed pip and needs help here
 
 - name: ensure that ansible has been updated to its latest version
   pip:
     name:
     - ansible
-    - netaddr
+#    - netaddr
     - redis
     state: latest
 

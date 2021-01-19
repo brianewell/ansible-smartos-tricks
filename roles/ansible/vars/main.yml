@@ -1,6 +1,10 @@
 ---
-redis:
+default_ansible:
   config:
-    databases: 2
-    maxmemory: 1mb
-    maxmemory-policy: volatile-ttl
+    defaults:
+      gathering: smart
+      fact_caching: redis
+      fact_caching_timeout: 3600
+      fact_caching_connection: localhost:6379:0
+    ssh_connection:
+      pipelining: true

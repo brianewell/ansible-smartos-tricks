@@ -1,3 +1,5 @@
 ---
 dependencies:
 - role: redis
+  vars:
+    redis: '{{ ansible_passed_redis_variables_that_ansible_apparently_cant_figure_out_on_its_own }}'

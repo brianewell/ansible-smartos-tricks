@@ -1,4 +1,4 @@
-!ansible-bootstrap.yml
+!bootstrap.yml
 !example.yml
 *.retry
 *.yml

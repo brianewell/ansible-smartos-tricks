@@ -1,9 +1,9 @@
 {{ configuration_header }}
 
-{% for key,value in inputrc.config|dictsort %}
+{% for key,value in (default_inputrc|combine(inputrc, recursive=True)).config|dictsort %}
 set {{ key }} {{ value }}
 {% endfor %}
 
-{% for key,value in inputrc.bindings|dictsort %}
+{% for key,value in (default_inputrc|combine(inputrc, recursive=True)).bindings|dictsort %}
 "{{ key }}": {{ value }}
 {% endfor %}

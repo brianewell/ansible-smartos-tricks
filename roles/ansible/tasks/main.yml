@@ -3,11 +3,13 @@
   pkgin:
     name:
     - git
+    - py38-cryptography
+    - py38-jinja2
+    - py38-pip
+    - py38-pyparsing
 #    - libyaml
 #    - py38-bcrypt
-    - py38-cryptography
 #    - py38-nacl
-    - py38-pip
 
 - name: ensure that pip has been updated to its latest version
   pip:

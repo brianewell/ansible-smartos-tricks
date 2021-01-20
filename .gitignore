@@ -1,5 +1,5 @@
 !bootstrap.yml
 !example.yml
 *.retry
-*.yml
+/*.yml
 .*.swp

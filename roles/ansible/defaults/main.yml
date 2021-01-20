@@ -1,0 +1,7 @@
+---
+ansible: {}
+ansible_passed_redis_variables_that_ansible_apparently_cant_figure_out_on_its_own:
+  config:
+    databases: 2
+    maxmemory: 1mb
+    maxmemory-policy: volatile-ttl

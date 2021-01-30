@@ -1,0 +1,6 @@
+---
+- name: restart clamav
+  when: not clamav_enabled.changed
+  service:
+    name: 'svc:/pkgsrc/clamav:freshclamd svc:/pkgsrc/clamav:clamd'
+    state: restarted

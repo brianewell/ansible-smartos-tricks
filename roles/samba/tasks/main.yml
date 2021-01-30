@@ -1,11 +1,10 @@
 ---
-- name: ensure presence of samba
+- name: ensure that samba has been installed
   notify: restart samba
   pkgin:
-    name:
-    - samba
+    name: samba
 
-- name: ensure that samba is properly configured
+- name: ensure that samba has been configured
   notify: restart samba
   template:
     src: smb.conf
@@ -14,10 +13,10 @@
     owner: root
     group: root
 
-- name: ensure that the log directory ({{ samba.global["log file"] | dirname }}) exists
-  when: samba.global['log file'] is defined
+- name: ensure that the log directory ({{ (default_samba|combine(samba, recursive=True)).global["log file"] | dirname }}) exists
+  when: (default_samba|combine(samba, recursive=True)).global['log file'] is defined
   file:
-    path: '{{ samba.global["log file"] | dirname }}'
+    path: '{{ (default_samba|combine(samba, recursive=True)).global["log file"] | dirname }}'
     state: directory
     owner: root
     group: root

@@ -1,0 +1,20 @@
+---
+default_samba:
+  global:
+    'workgroup': 'MYGROUP'
+    'server string': 'Samba %v (%h)'
+    'server role': 'standalone server'
+    'log file': '/var/log/samba/log.%m'
+    'max log size': 50
+    'dns proxy': 'no'
+  homes:
+    'comment': 'Home Directories'
+    'browseable': 'no'
+    'writable': 'yes'
+  printers:
+    'comment': 'All Printers'
+    'path': '/var/spool/samba'
+    'browseable': 'no'
+    'guest ok': 'no'
+    'writable': 'no'
+    'printable': 'yes'

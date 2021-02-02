@@ -5,7 +5,7 @@
     name: '{{ zone_dataset }}/redis'
     state: present
     extra_zfs_properties:
-      mountpoint: '{{ redis.config.dir }}'
+      mountpoint: '{{ (default_redis|combine(redis, recursive=True)).config.dir }}'
 
 - name: ensure that redis has been installed
   notify: restart redis

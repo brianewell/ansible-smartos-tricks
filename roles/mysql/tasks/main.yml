@@ -13,7 +13,7 @@
   pkgin:
     name:
     - '{{ (default_mysql|combine(mysql, recursive=True)).server }}-server'
-    - py37-pymysql
+    - py38-pymysql
 
 - name: determine if {{ (default_mysql|combine(mysql, recursive=True)).server }}-server database cluster has been properly initialized
   register: mysql_cluster
@@ -47,22 +47,21 @@
     name: 'svc:/pkgsrc/{{ (default_mysql|combine(mysql, recursive=True)).server }}:default'
     enabled: true
 
-# Yet another reason to hate Ansible
-# - name: generate a randomized password for the database root user
-#   set_fact:
-#     mysql_root_password: "{{ lookup( 'password', '/dev/null' ) }}"
-# 
-# - name: ensure that database root password is set to the previously generated password
-#   mysql_user:
-#     check_implicit_admin: true
-#     name: root
-#     host_all: true
-#     password: '{{ mysql_root_password }}'
-# 
-# - name: ensure that .my.cnf exists with root credentials
-#   template:
-#     src: my.cnf
-#     dest: /root/.my.cnf
-#     owner: root
-#     group: root
-#     mode: 0640
+- name: generate a randomized password for the database root user
+  set_fact:
+    mysql_root_password: "{{ lookup( 'password', '/dev/null' ) }}"
+
+- name: ensure that database root password is set to the previously generated password
+  mysql_user:
+    check_implicit_admin: true
+    name: root
+    host_all: true
+    password: '{{ mysql_root_password }}'
+
+- name: ensure that .my.cnf exists with root credentials
+  template:
+    src: my.cnf
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0640

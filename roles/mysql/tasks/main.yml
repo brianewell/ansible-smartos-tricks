@@ -5,79 +5,64 @@
     name: '{{ zone_dataset }}/mysql'
     state: present
     extra_zfs_properties:
-      mountpoint: '{{ mysql.config.mysqld.datadir }}'
-      recordsize: '{{ mysql.recordsize }}'
+      mountpoint: '{{ (default_mysql|combine(mysql, recursive=True)).config.mysqld.datadir }}'
+      recordsize: '{{ (default_mysql|combine(mysql, recursive=True)).recordsize }}'
 
-- name: ensure presence of {{ mysql.server }}-server and pymysql (for ansible configuration of {{ mysql.server }})
+- name: ensure presence of {{ (default_mysql|combine(mysql, recursive=True)).server }}-server and pymysql (for ansible configuration of {{ (default_mysql|combine(mysql, recursive=True)).server }})
   notify: restart mysql-server
   pkgin:
     name:
-    - '{{ mysql.server }}-server'
+    - '{{ (default_mysql|combine(mysql, recursive=True)).server }}-server'
     - py37-pymysql
 
-- name: determine if {{ mysql.server }}-server database cluster has been properly initialized
+- name: determine if {{ (default_mysql|combine(mysql, recursive=True)).server }}-server database cluster has been properly initialized
   register: mysql_cluster
-  command: ls {{ mysql.config.mysqld.datadir }}
+  command: ls {{ (default_mysql|combine(mysql, recursive=True)).config.mysqld.datadir }}
 
-- name: ensure that {{ mysql.server }}-server database cluster has been properly initialized
+- name: ensure that {{ (default_mysql|combine(mysql, recursive=True)).server }}-server database cluster has been properly initialized
   when: mysql_cluster.stdout == ""
-  command: /opt/local/bin/mysql_install_db --user={{ mysql.config.mysqld.user }} --group={{ mysql.config.mysqld.user }} --basedir={{ mysql.config.mysqld.basedir }} --datadir={{ mysql.config.mysqld.datadir }}
+  command: /opt/local/bin/mysql_install_db --user={{ (default_mysql|combine(mysql, recursive=True)).config.mysqld.user }} --group={{ (default_mysql|combine(mysql, recursive=True)).config.mysqld.user }} --basedir={{ (default_mysql|combine(mysql, recursive=True)).config.mysqld.basedir }} --datadir={{ (default_mysql|combine(mysql, recursive=True)).config.mysqld.datadir }}
 
 - name: ensure secure permissions on mysql ZFS mountpoint
   file:
-    path: '{{ mysql.config.mysqld.datadir }}'
+    path: '{{ (default_mysql|combine(mysql, recursive=True)).config.mysqld.datadir }}'
     state: directory
-    owner: mysql
-    group: root
+    owner: '{{ (default_mysql|combine(mysql, recursive=True)).config.mysqld.user }}'
+    group: '{{ (default_mysql|combine(mysql, recursive=True)).config.mysqld.group }}'
     mode: 0750
 
-- name: ensure that {{ mysql.server }}-server is properly configured
-  notify: restart mysql-server
-  template:
-    src: system-my.cnf
-    dest: /opt/local/etc/my.cnf
-    owner: root
-    group: root
-    mode: 0644
+# Configuring MySQL is apparently off the table
+# - name: ensure that {{ (default_mysql|combine(mysql, recursive=True)).server }}-server is properly configured
+#   notify: restart mysql-server
+#   template:
+#     src: system-my.cnf
+#     dest: /opt/local/etc/my.cnf
+#     owner: root
+#     group: root
+#     mode: 0644
 
-- name: ensure that {{ mysql.server }}-server is enabled
+- name: ensure that {{ (default_mysql|combine(mysql, recursive=True)).server }}-server is enabled
   register: mysql_enabled
   service:
-    name: 'svc:/pkgsrc/{{ mysql.server }}:default'
+    name: 'svc:/pkgsrc/{{ (default_mysql|combine(mysql, recursive=True)).server }}:default'
     enabled: true
 
-- name: ensure absence of test database
-  mysql_db:
-    name: test
-    state: absent
-
-- name: ensure absence of anonymous database users
-  mysql_user:
-    name: ''
-    host_all: true
-    state: absent
-
-- name: ensure absence of FQDN host root user
-  mysql_user:
-    name: root
-    host: '{{ ansible_hostname }}'
-    state: absent
-
-- name: generate a randomized password for the database root user
-  set_fact:
-    mysql_root_password: "{{ lookup( 'password', '/dev/null' ) }}"
-
-- name: ensure that database root password is set to the previously generated password
-  mysql_user:
-    check_implicit_admin: true
-    name: root
-    host_all: true
-    password: '{{ mysql_root_password }}'
-
-- name: ensure that .my.cnf exists with root credentials
-  template:
-    src: my.cnf
-    dest: /root/.my.cnf
-    owner: root
-    group: root
-    mode: 0640
+# Yet another reason to hate Ansible
+# - name: generate a randomized password for the database root user
+#   set_fact:
+#     mysql_root_password: "{{ lookup( 'password', '/dev/null' ) }}"
+# 
+# - name: ensure that database root password is set to the previously generated password
+#   mysql_user:
+#     check_implicit_admin: true
+#     name: root
+#     host_all: true
+#     password: '{{ mysql_root_password }}'
+# 
+# - name: ensure that .my.cnf exists with root credentials
+#   template:
+#     src: my.cnf
+#     dest: /root/.my.cnf
+#     owner: root
+#     group: root
+#     mode: 0640

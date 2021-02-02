@@ -1,6 +1,6 @@
 ---
-mysql:
-  server: mariadb
+default_mysql:
+  server: mysql
   recordsize: 16k
   config:
     client:
@@ -24,6 +24,7 @@ mysql:
 # General Settings
 #------------------
       user: mysql
+      group: mysql
       port: 3306
       basedir: /opt/local
       datadir: /var/mysql

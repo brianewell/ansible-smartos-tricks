@@ -31,6 +31,12 @@
   when: home_dataset and delegate_dataset is succeeded
   include_tasks: home_dataset.yml
 
+- name: ensure that all packages have been upgraded
+  pkgin:
+    clean: true
+    full_upgrade: true
+    update_cache: true
+
 - name: ensure that useradd is properly configured
   template:
     src: useradd
@@ -69,7 +75,3 @@
   lineinfile:
     path: /root/.vimrc
     line: colorscheme {{ vim.colorscheme }}
-
-- name: ensure that the pkgsrc cache has been updated
-  pkgin:
-    update_cache: true

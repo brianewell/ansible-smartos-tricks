@@ -1,13 +1,2 @@
 ---
-ghost:
-  env: production
-  url: 'http://localhost/'
-  path: /var/www/ghost
-  user: ghost
-  group: ghost
-  project: ghost
-  dataset: ghost
-  db_host: '127.0.0.1'
-  db_name: ghost
-  db_user: ghost
-  socket: /var/www/ghost/app.sock
+ghost: {}

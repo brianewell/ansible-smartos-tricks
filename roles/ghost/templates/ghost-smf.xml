@@ -10,11 +10,11 @@
     <dependency name='filesystem' grouping='require_all' restart_on='error' type='service'>
       <service_fmri value='svc:/system/filesystem/local'/>
     </dependency>
-    <method_context project='{{ ghost.project }}' working_directory='{{ ghost.path }}'>
-      <method_credential group='{{ ghost.group }}' user='{{ ghost.user }}'/>
+    <method_context project='{{ (default_ghost|combine(ghost, recursive=True)).project }}' working_directory='{{ (default_ghost|combine(ghost, recursive=True)).path }}'>
+      <method_credential group='{{ (default_ghost|combine(ghost, recursive=True)).group }}' user='{{ (default_ghost|combine(ghost, recursive=True)).user }}'/>
       <method_environment>
         <envvar name='PATH' value='/opt/local/sbin:/opt/local/bin:/usr/sbin:/usr/bin'/>
-        <envvar name='NODE_ENV' value='{{ ghost.env }}'/>
+        <envvar name='NODE_ENV' value='{{ (default_ghost|combine(ghost, recursive=True)).env }}'/>
       </method_environment>
     </method_context>
     <exec_method name='start' type='method' exec='/opt/local/bin/ghost run' timeout_seconds='60'/>

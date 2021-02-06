@@ -1,13 +1,13 @@
 {
-	"url": "{{ ghost.url }}",
+	"url": "{{ (default_ghost|combine(ghost, recursive=True)).url }}",
 
 	"database": {
 		"client": "mysql",
 		"connection": {
-			"host": "{{ ghost.db_host }}",
-			"user": "{{ ghost.db_user }}",
+			"host": "{{ (default_ghost|combine(ghost, recursive=True)).db_host }}",
+			"user": "{{ (default_ghost|combine(ghost, recursive=True)).db_user }}",
 			"password": "{{ ghost_db_pass }}",
-			"database": "{{ ghost.db_name }}"
+			"database": "{{ (default_ghost|combine(ghost, recursive=True)).db_name }}"
 		}
 	},
 
@@ -16,11 +16,11 @@
 	},
 
 	"server": {
-{% if ghost.http_host is defined and ghost.http_port is defined %}
-		"host": "{{ ghost.http_host }}",
-		"port": {{ ghost.http_port }}
-{% elif ghost.socket is defined %}
-		"socket": "{{ ghost.socket }}"
+{% if (default_ghost|combine(ghost, recursive=True)).http_host is defined and (default_ghost|combine(ghost, recursive=True)).http_port is defined %}
+		"host": "{{ (default_ghost|combine(ghost, recursive=True)).http_host }}",
+		"port": {{ (default_ghost|combine(ghost, recursive=True)).http_port }}
+{% elif (default_ghost|combine(ghost, recursive=True)).socket is defined %}
+		"socket": "{{ (default_ghost|combine(ghost, recursive=True)).socket }}"
 {% endif %}
 	},
 

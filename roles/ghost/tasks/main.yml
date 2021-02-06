@@ -10,76 +10,76 @@
     name: ghost-cli
     global: true
 
-- name: ensure the existence of ghost ZFS dataset at {{ ghost.path }}
+- name: ensure the existence of ghost ZFS dataset at {{ (default_ghost|combine(ghost, recursive=True)).path }}
   when: delegate_dataset is succeeded
   zfs:
-    name: '{{ zone_dataset }}/{{ ghost.dataset }}'
+    name: '{{ zone_dataset }}/{{ (default_ghost|combine(ghost, recursive=True)).dataset }}'
     state: present
     extra_zfs_properties:
-      mountpoint: '{{ ghost.path }}'
+      mountpoint: '{{ (default_ghost|combine(ghost, recursive=True)).path }}'
 
-- name: ensure presence of {{ ghost.group }} group
+- name: ensure presence of {{ (default_ghost|combine(ghost, recursive=True)).group }} group
   group:
-    name: '{{ ghost.group }}'
+    name: '{{ (default_ghost|combine(ghost, recursive=True)).group }}'
 
-- name: ensure presence of {{ ghost.user }} user
+- name: ensure presence of {{ (default_ghost|combine(ghost, recursive=True)).user }} user
   user:
-    name: '{{ ghost.user }}'
-    home: '{{ ghost.path }}'
-    group: '{{ ghost.group }}'
+    name: '{{ (default_ghost|combine(ghost, recursive=True)).user }}'
+    home: '{{ (default_ghost|combine(ghost, recursive=True)).path }}'
+    group: '{{ (default_ghost|combine(ghost, recursive=True)).group }}'
 
-- name: ensure presence of {{ ghost.project }} project
-  command: projadd -U {{ ghost.user }} -G {{ ghost.group }} -c "Ghost server" -K "process.max-file-descriptor=(basic,65536,deny)" {{ ghost.project }}
+- name: ensure presence of {{ (default_ghost|combine(ghost, recursive=True)).project }} project
+  command: projadd -U {{ (default_ghost|combine(ghost, recursive=True)).user }} -G {{ (default_ghost|combine(ghost, recursive=True)).group }} -c "Ghost server" -K "process.max-file-descriptor=(basic,65536,deny)" {{ (default_ghost|combine(ghost, recursive=True)).project }}
   ignore_errors: true
 
-- name: ensure correct permissions of {{ ghost.path }}
+- name: ensure correct permissions of {{ (default_ghost|combine(ghost, recursive=True)).path }}
   file:
-    path: '{{ ghost.path }}'
+    path: '{{ (default_ghost|combine(ghost, recursive=True)).path }}'
     state: directory
-    owner: '{{ ghost.user }}'
-    group: '{{ ghost.group }}'
+    owner: '{{ (default_ghost|combine(ghost, recursive=True)).user }}'
+    group: '{{ (default_ghost|combine(ghost, recursive=True)).group }}'
     mode: 0755
 
 - name: ensure a randomized password for the Ghost MySQL user
   set_fact:
     ghost_db_pass: "{{ lookup( 'password', '/dev/null' ) }}"
 
-- name: ensure the existence of MySQL database {{ ghost.db_name }}
+- name: ensure the existence of MySQL database {{ (default_ghost|combine(ghost, recursive=True)).db_name }}
   mysql_db:
-    name: '{{ ghost.db_name }}'
+    name: '{{ (default_ghost|combine(ghost, recursive=True)).db_name }}'
 
-- name: ensure the existence of MySQL user {{ ghost.db_user }}
+- name: ensure the existence of MySQL user {{ (default_ghost|combine(ghost, recursive=True)).db_user }}
   mysql_user:
-    host: '{{ ghost.db_host }}'
-    name: '{{ ghost.db_user }}'
+    host: '{{ (default_ghost|combine(ghost, recursive=True)).db_host }}'
+    name: '{{ (default_ghost|combine(ghost, recursive=True)).db_user }}'
     password: '{{ ghost_db_pass }}'
-    priv: '{{ ghost.db_name }}.*:ALL'
+    priv: '{{ (default_ghost|combine(ghost, recursive=True)).db_name }}.*:ALL'
 
 # Attempt to update Ghost before installing.  This will avoid performing both operations
 
 - name: ensure that ghost is up to date
   become: true
-  become_user: '{{ ghost.user }}'
+  become_user: '{{ (default_ghost|combine(ghost, recursive=True)).user }}'
   command: ghost update
   args:
-    chdir: '{{ ghost.path }}'
-    removes: '{{ ghost.path }}/*'
+    chdir: '{{ (default_ghost|combine(ghost, recursive=True)).path }}'
+    removes: '{{ (default_ghost|combine(ghost, recursive=True)).path }}/*'
 
 - name: ensure that ghost is installed
   become: true
-  become_user: '{{ ghost.user }}'
+  become_user: '{{ (default_ghost|combine(ghost, recursive=True)).user }}'
   command: ghost install --no-stack --no-setup --no-check-mem --no-start --no-enable
   args:
-    chdir: '{{ ghost.path }}'
-    creates: '{{ ghost.path }}/*'
+    chdir: '{{ (default_ghost|combine(ghost, recursive=True)).path }}'
+    creates: '{{ (default_ghost|combine(ghost, recursive=True)).path }}/*'
 
-- name: ensure that ghost is configured {{ ghost.url }}
+- name: ensure that ghost is configured {{ (default_ghost|combine(ghost, recursive=True)).url }}
   notify: restart ghost
   template:
     src:   config.json
-    dest:  '{{ ghost.path }}/config.{{ ghost.env }}.json'
-    owner: '{{ ghost.user }}'
-    group: '{{ ghost.group }}'
+    dest:  '{{ (default_ghost|combine(ghost, recursive=True)).path }}/config.{{ (default_ghost|combine(ghost, recursive=True)).env }}.json'
+    owner: '{{ (default_ghost|combine(ghost, recursive=True)).user }}'
+    group: '{{ (default_ghost|combine(ghost, recursive=True)).group }}'
     mode:  0644
 
 - name: ensure presence of Ghost SMF manifest

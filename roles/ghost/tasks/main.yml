@@ -56,8 +56,8 @@
     priv: '{{ (default_ghost|combine(ghost, recursive=True)).db_name }}.*:ALL'
 
 # Attempt to update Ghost before installing.  This will avoid performing both operations
-
 - name: ensure that ghost is up to date
+  notify: restart ghost
   become: true
   become_user: '{{ (default_ghost|combine(ghost, recursive=True)).user }}'
   command: ghost update
@@ -66,9 +66,10 @@
     removes: '{{ (default_ghost|combine(ghost, recursive=True)).path }}/*'
 
 - name: ensure that ghost is installed
+  notify: restart ghost
   become: true
   become_user: '{{ (default_ghost|combine(ghost, recursive=True)).user }}'
-  command: ghost install --no-stack --no-setup --no-check-mem --no-start --no-enable
+  command: ghost install local --no-stack --no-setup --no-check-mem --no-start --no-enable
   args:
     chdir: '{{ (default_ghost|combine(ghost, recursive=True)).path }}'
     creates: '{{ (default_ghost|combine(ghost, recursive=True)).path }}/*'

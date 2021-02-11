@@ -46,3 +46,4 @@
     type: ed25519
     owner: root
     group: root
+    comment: Ansible

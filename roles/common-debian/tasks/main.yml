@@ -12,8 +12,9 @@
     line: PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/native/usr/sbin:/native/usr/bin:/native/bin"
 
 - name: ensure that the hostname has been set
+  when: hostname is defined
   hostname:
-    name: "{{ ( default_plex | combine( plex, recursive=True )).hostname }}"
+    name: "{{ hostname }}"
 
 # Apparently Ansible does not respect PATH variables defined on the remote side.  Lovely 
 - name: determine the zone uuid

@@ -1,0 +1,6 @@
+---
+- name: restart plexmediaserver
+  when: not plexmediaserver_enabled.changed
+  service:
+    name: plexmediaserver
+    state: restarted

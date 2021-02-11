@@ -1,0 +1,56 @@
+---
+- name: ensure that the Plex package signing key has been added
+  apt_key:
+    url: https://downloads.plex.tv/plex-keys/PlexSign.key
+
+- name: ensure that the Plex repository has been added to the sources list
+  apt_repository:
+    filename: plexmediaserver
+    repo: deb https://downloads.plex.tv/repo/deb public main
+
+- name: ensure presence of ZFS dataset at /var/lib/plexmediaserver
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/native/usr/sbin"
+  zfs:
+    name: '{{ zone_dataset }}/plex'
+    state: present
+    extra_zfs_properties:
+      mountpoint: /var/lib/plexmediaserver
+
+- name: ensure presence of ZFS dataset at /var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Plug-in Support/Databases
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/native/usr/sbin"
+  zfs:
+    name: '{{ zone_dataset }}/plex/database'
+    state: present
+    extra_zfs_properties:
+      recordsize: 16k
+      mountpoint: /var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Plug-in Support/Databases
+
+- name: ensure ownership of /var/lib/plexmediaserver is 999:999
+  file:
+    state: directory
+    path: /var/lib/plexmediaserver
+    mode: 0755
+    owner: '999'
+    group: '999'
+    recurse: true
+
+- name: ensure that Plex Media Server has been installed
+  notify: restart plexmediaserver
+  apt:
+    name: plexmediaserver
+
+- name: ensure that Plex Media Server is enabled
+  register: plexmediaserver_enabled
+  service:
+    name: plexmediaserver
+    enabled: true
+
+- name: ensure that system will update all packages automatically
+  cron:
+    name: apt autoupdate
+    minute: '15'
+    hour: '0,12'
+    user: root
+    job: apt update && apt full-upgrade

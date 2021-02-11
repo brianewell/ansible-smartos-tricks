@@ -5,7 +5,7 @@
 {% endfor %}
 
 {% for key_type in (default_sshd|combine(sshd, recursive=True)).key_types|sort %}
-HostKey /var/ssh/ssh_host_{{ key_type }}_key
+HostKey /etc/ssh/ssh_host_{{ key_type }}_key
 {% endfor %}
 
 {% for match,parameters in (default_sshd|combine(sshd, recursive=True)).match|default({})|dictsort %}

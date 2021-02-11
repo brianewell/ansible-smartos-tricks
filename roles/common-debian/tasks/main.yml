@@ -1,0 +1,51 @@
+---
+- name: fail when not Debian or Ubuntu
+  when: ansible_distribution != 'Debian' and ansible_distribution != 'Ubuntu'
+  fail:
+    msg: This role is intended to only be used on Debian or Ubuntu distributions
+
+- name: ensure that /native is available in the $PATH variable
+  when: ansible_distribution == 'Debian'
+  lineinfile:
+    path: /etc/profile
+    regex: PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    line: PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/native/usr/sbin:/native/usr/bin:/native/bin"
+
+- name: ensure that the hostname has been set
+  hostname:
+    name: "{{ ( default_plex | combine( plex, recursive=True )).hostname }}"
+
+# Apparently Ansible does not respect PATH variables defined on the remote side.  Lovely 
+- name: determine the zone uuid
+  command: /native/usr/bin/zonename
+  register: zonename_command
+
+- name: set the zone dataset fact
+  set_fact:
+    zone_dataset: 'zones/{{ zonename_command.stdout }}/data'
+
+- name: ensure that the delegated ZFS filesystem is unmounted
+  ignore_errors: true
+  notify: remove delegated mountpoint
+  register: delegate_dataset
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/native/usr/sbin"
+  zfs:
+    name: '{{ zone_dataset }}'
+    state: present
+    extra_zfs_properties:
+      mountpoint: none
+
+- name: ensure that all packages have been upgraded
+  apt:
+    update_cache: true
+    upgrade: full
+
+- name: ensure that sshd is securely configured
+  notify: restart sshd
+  template:
+    src: sshd_config
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0644

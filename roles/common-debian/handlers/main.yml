@@ -1,0 +1,10 @@
+---
+- name: remove delegated mountpoint
+  file:
+    path: '/zones'
+    state: absent
+
+- name: restart sshd
+  service:
+    name: ssh
+    state: restarted
